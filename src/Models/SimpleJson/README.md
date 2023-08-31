@@ -1,4 +1,4 @@
-## JSON Dynamic Conversion
+## Simple JSON: JSON Dynamic Conversion
 A tool designed to ease the loading of dynamically parsed JSON objects from `JsonSerializer.Deserialize<dynamic>` into objects.
 - Often times when using APIs, they return more information than needed from their endpoint.
     - Trying to decode this information with a custom JSON deserializer can be annoying when working with 3rd party APIs we don't control.

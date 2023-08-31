@@ -3,10 +3,13 @@ namespace Hue;
 using System.Text.Json;
 using JsonConversion;
 
-public class HueLightFromJson : IFromJsonConverter
+/// <summary>
+/// Class which handles parsing Json 
+/// </summary>
+public class HueLightSimpleJsonConverter : ISimpleJsonConverter
 {
     /// <summary>
-    /// Creates a HueLight from dynamic JSON data. 
+    /// Creates a HueLight from dynamic JSON data provided from the Hue API. 
     /// </summary>
     /// <param name="data">The data to create a HueLight from. </param>
     /// <returns></returns>
@@ -37,6 +40,11 @@ public class HueLightFromJson : IFromJsonConverter
                 Blue = CieFromJsonElement(data.GetProperty("color").GetProperty("gamut").GetProperty("blue"))
             }
         };
+    }
+
+    public string ToJson(object data)
+    {
+        throw new NotImplementedException();
     }
 
     private CieColor CieFromJsonElement(JsonElement data)

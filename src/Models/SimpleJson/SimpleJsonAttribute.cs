@@ -4,7 +4,7 @@ namespace JsonConversion;
 /// Class defining an attribute for custom implementations of DynamicConverters. 
 /// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-public class FromJsonConverterAttribute : Attribute
+public class SimpleJsonConverterAttribute : Attribute
 {
     /// <summary>
     /// The object type this Attrubute points conversion to.   
@@ -15,8 +15,8 @@ public class FromJsonConverterAttribute : Attribute
     /// Creates a new instance of a FromJsonConverterAttribute.
     /// <param name=converterType> The object type this attribute handles conversion for. </param>
     /// </summary>
-    public FromJsonConverterAttribute(Type converterType)
+    public SimpleJsonConverterAttribute(Type converterType)
     {
-        this.ConverterType = converterType;
+        ConverterType = converterType;
     }
 }

@@ -1,6 +1,5 @@
 namespace Hue;
 
-using System.Text.Json.Serialization;
 using JsonConversion;
 
 /// <summary>
@@ -40,7 +39,7 @@ using JsonConversion;
 /// - timed effects
 /// - powerup 
 /// </summary>
-[FromJsonConverter(typeof(HueLightFromJson))]
+[SimpleJsonConverter(typeof(HueLightSimpleJsonConverter))]
 public class HueLight : HueResource {
 
     /// <summary>

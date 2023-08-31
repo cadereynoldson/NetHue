@@ -1,13 +1,11 @@
 namespace JsonConversion;
 
-using System.ComponentModel;
 using System.Text.Json;
 
 /// <summary>
 /// Class designed to convert JSON Element objects and JSON strings to its corresponding object.
-/// <typeparam name="T">The type of object to be handled by the converter.</typeparam>
 /// </summary>
-public class FromJson
+public class SimpleJson
 {
     /// <summary>
     /// Converts json element to an object of type T.  
@@ -15,13 +13,13 @@ public class FromJson
     /// </summary> 
     public static T? Convert<T>(JsonElement json)
     {
-        var attribute = typeof(T).GetCustomAttributes(typeof(FromJsonConverterAttribute), true)
-                                     .OfType<FromJsonConverterAttribute>()
+        var attribute = typeof(T).GetCustomAttributes(typeof(SimpleJsonConverterAttribute), true)
+                                     .OfType<SimpleJsonConverterAttribute>()
                                      .FirstOrDefault();
 
         if (attribute != null)
         {
-            return Activator.CreateInstance(attribute.ConverterType) is IFromJsonConverter converter ? (T)converter.Convert(json) : default;
+            return Activator.CreateInstance(attribute.ConverterType) is ISimpleJsonConverter converter ? (T)converter.Convert(json) : default;
         }
 
         throw new InvalidOperationException($"No DynamicToClassConverterAttribute found for type {typeof(T).Name}");
@@ -33,9 +31,7 @@ public class FromJson
     /// </summary> 
     public static T? Convert<T>(string json)
     {
-        using (JsonDocument document = JsonDocument.Parse(json))
-        {
-            return Convert<T>(document.RootElement);
-        }
+        using JsonDocument document = JsonDocument.Parse(json);
+        return Convert<T>(document.RootElement);
     }
 }
