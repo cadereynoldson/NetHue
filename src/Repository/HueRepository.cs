@@ -17,9 +17,16 @@ public class HueRepository
     private readonly string BaseEndpoint;
 
     /// <summary>
-    /// The HTTP client we will use to make HTTP requests to the Philips Hue Bridge. 
+    /// HueBridge configuration storing information on the HueBridge. 
     /// </summary>
-    private readonly HttpClient Client;
+    private readonly HueBridgeConfiguration Configuration;
+
+    /// <summary>
+    /// Workaround for the meantime to allow for ignoring SSL.
+    /// Note, this is because old hue bridges have a self signed certificate
+    /// and take some custom certificate checking which isn't implemented yet. 
+    /// </summary>
+    private readonly HttpClientHandler HttpClientHandler;
 
     /// <summary>
     /// Creates a new insance of a HueRepository. 
@@ -35,10 +42,7 @@ public class HueRepository
     {
         BaseEndpoint = $"https://{config.Ip}/clip/v2";
 
-        // Workaround for the meantime to allow for ignoring SSL.
-        // Note, this is because old hue bridges have a self signed certificate
-        // and take some custom certificate checking which isn't implemented yet. 
-        var httpClientHandler = new HttpClientHandler
+        HttpClientHandler = new HttpClientHandler
         {
             ClientCertificateOptions = ClientCertificateOption.Manual,
             ServerCertificateCustomValidationCallback =
@@ -47,10 +51,6 @@ public class HueRepository
                 return true;
             }
         };
-
-        Client = new HttpClient(httpClientHandler);
-        Client.DefaultRequestHeaders.Add("hue-application-key", config.AppKey);
-
     }
 
     /// <summary>
@@ -62,9 +62,11 @@ public class HueRepository
     public async Task<string> Get(string path)
     {
         try
-        {
+        {   
+            using HttpClient client = BuildHttpClient(); 
+
             var endpoint = $"{BaseEndpoint}/{path}";
-            HttpResponseMessage response = await Client.GetAsync(endpoint);
+            HttpResponseMessage response = await client.GetAsync(endpoint);
             var responseContent = await response.Content.ReadAsStringAsync();
 
             var errors = ParseErrors(responseContent);
@@ -97,10 +99,12 @@ public class HueRepository
     {
         try
         {
+            using HttpClient client = BuildHttpClient();
+
             var endpoint = $"{BaseEndpoint}/{path}";
             var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage response = await Client.PutAsync(endpoint, content);
+            HttpResponseMessage response = await client.PutAsync(endpoint, content);
             var responseContent = await response.Content.ReadAsStringAsync();
 
             var errors = ParseErrors(responseContent);
@@ -134,6 +138,17 @@ public class HueRepository
             $"{messageHeader}: {ParseErrors(responseContent)}",
             response: responseContent
         );
+    }
+
+    /// <summary>
+    /// Builds a HTTP client to be used for calls to a HueBridge. 
+    /// </summary>
+    /// <returns>A HttpClient to be used for calls to a HueBridge.</returns>
+    private HttpClient BuildHttpClient()
+    {
+        var client = new HttpClient(HttpClientHandler);
+        client.DefaultRequestHeaders.Add("hue-application-key", Configuration.AppKey);
+        return client; 
     }
 
     /// <summary>
