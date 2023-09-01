@@ -41,7 +41,7 @@ public class HueRepository
     public HueRepository(HueBridgeConfiguration config)
     {
         BaseEndpoint = $"https://{config.Ip}/clip/v2";
-
+        Configuration = config;
         HttpClientHandler = new HttpClientHandler
         {
             ClientCertificateOptions = ClientCertificateOption.Manual,
@@ -125,9 +125,12 @@ public class HueRepository
     }
 
     /// <summary>
-    /// Function called when an error occured in 
+    /// 
     /// </summary>
+    /// <param name="response"></param>
     /// <param name="method"></param>
+    /// <param name="responseContent"></param>
+    /// <returns></returns>
     private HueHttpException BuildErrorException(ref HttpResponseMessage response, string method, string responseContent)
     {
         var messageHeader = response.IsSuccessStatusCode ?
