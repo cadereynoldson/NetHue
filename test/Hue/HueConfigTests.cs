@@ -16,7 +16,7 @@ public class HueBridgeConfigTests
     {
         var config = HueBridgeConfiguration.FromFile(path);
         Assert.NotNull(config);
-        Assert.Equal(config.Ip, "0.0.0.0");
-        Assert.Equal(config.AppKey, "appKey");
+        Assert.Equal("0.0.0.0", config.Ip);
+        Assert.Equal("appKey", config.AppKey);
     }
 }
