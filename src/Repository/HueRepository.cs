@@ -1,6 +1,5 @@
 namespace Hue;
 
-using System.Net;
 using System.Text;
 using System.Text.Json;
 
@@ -62,8 +61,8 @@ public class HueRepository
     public async Task<string> Get(string path)
     {
         try
-        {   
-            using HttpClient client = BuildHttpClient(); 
+        {
+            using HttpClient client = BuildHttpClient();
 
             var endpoint = $"{BaseEndpoint}/{path}";
             HttpResponseMessage response = await client.GetAsync(endpoint);
@@ -151,7 +150,7 @@ public class HueRepository
     {
         var client = new HttpClient(HttpClientHandler);
         client.DefaultRequestHeaders.Add("hue-application-key", Configuration.AppKey);
-        return client; 
+        return client;
     }
 
     /// <summary>
