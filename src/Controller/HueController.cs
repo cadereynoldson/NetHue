@@ -16,13 +16,13 @@ public abstract class HueController
     /// Creates a new instance of a HueController. 
     /// </summary>
     /// <param name="configPath">The path to the HueBridgeConfiguration compatible file.</param>
-    public HueController(string configPath) : this(HueBridgeConfiguration.FromFile(configPath)) {}
+    public HueController(string configPath) : this(HueBridgeConfiguration.FromFile(configPath)) { }
 
     /// <summary>
     /// Creates a new instance of a HueController.
     /// </summary>
     /// <param name="config">The HueBridgeConfiguration to use.</param>
-    public HueController(HueBridgeConfiguration config) : this(new HueRepository(config)) {}
+    public HueController(HueBridgeConfiguration config) : this(new HueRepository(config)) { }
 
     /// <summary>
     /// Creates a new instance of a HueController.

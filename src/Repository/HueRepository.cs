@@ -1,5 +1,6 @@
 namespace Hue;
 
+using System.Text;
 using System.Text.Json;
 
 
@@ -15,15 +16,22 @@ public class HueRepository
     private readonly string BaseEndpoint;
 
     /// <summary>
-    /// The HTTP client we will use to make HTTP requests to the Philips Hue Bridge. 
+    /// HueBridge configuration storing information on the HueBridge. 
     /// </summary>
-    private readonly HttpClient Client;
+    private readonly HueBridgeConfiguration Configuration;
+
+    /// <summary>
+    /// Workaround for the meantime to allow for ignoring SSL.
+    /// Note, this is because old hue bridges have a self signed certificate
+    /// and take some custom certificate checking which isn't implemented yet. 
+    /// </summary>
+    private readonly HttpClientHandler HttpClientHandler;
 
     /// <summary>
     /// Creates a new insance of a HueRepository. 
     /// </summary>
     /// <param name="configPath">The path to the HueBridgeConfiguration compatible JSON file.</param>
-    public HueRepository(string configPath) : this(HueBridgeConfiguration.FromFile(configPath)) {}
+    public HueRepository(string configPath) : this(HueBridgeConfiguration.FromFile(configPath)) { }
 
     /// <summary>
     /// Creates a new instance of a HueRepository. 
@@ -32,11 +40,8 @@ public class HueRepository
     public HueRepository(HueBridgeConfiguration config)
     {
         BaseEndpoint = $"https://{config.Ip}/clip/v2";
-
-        // Workaround for the meantime to allow for ignoring SSL.
-        // Note, this is because old hue bridges have a self signed certificate
-        // and take some custom certificate checking which isn't implemented yet. 
-        var httpClientHandler = new HttpClientHandler
+        Configuration = config;
+        HttpClientHandler = new HttpClientHandler
         {
             ClientCertificateOptions = ClientCertificateOption.Manual,
             ServerCertificateCustomValidationCallback =
@@ -45,10 +50,6 @@ public class HueRepository
                 return true;
             }
         };
-
-        Client = new HttpClient(httpClientHandler);
-        Client.DefaultRequestHeaders.Add("hue-application-key", config.AppKey);
-
     }
 
     /// <summary>
@@ -61,28 +62,21 @@ public class HueRepository
     {
         try
         {
+            using HttpClient client = BuildHttpClient();
+
             var endpoint = $"{BaseEndpoint}/{path}";
-            HttpResponseMessage response = await Client.GetAsync(endpoint);
+            HttpResponseMessage response = await client.GetAsync(endpoint);
             var responseContent = await response.Content.ReadAsStringAsync();
 
             var errors = ParseErrors(responseContent);
 
             if (response.IsSuccessStatusCode && errors.Length == 0)
             {
-                // Only return successful response when errors are not contained. 
-                return responseContent; 
+                return responseContent;
             }
             else
             {
-                // The request was not successful, handle the error & fail aggressively. 
-                var messageHeader = response.IsSuccessStatusCode ?
-                    $"HueRepository.GET() succeeded with status code {response.StatusCode}, but errors exist in response" :
-                    $"HueRepository.GET() failed with status code: {response.StatusCode}";
-
-                throw new HueHttpException(
-                    $"{messageHeader}: {ParseErrors(responseContent)}",
-                    response: responseContent
-                );
+                throw BuildErrorException(ref response, "GET", responseContent);
             }
         }
         catch (Exception ex)
@@ -91,6 +85,72 @@ public class HueRepository
                 ex.Message
             );
         }
+    }
+
+    /// <summary>
+    /// Sends a PUT request to the Hue API endpoint. 
+    /// </summary>
+    /// <param name="path">The path of the API endpoint to request.</param>
+    /// <param name="jsonBody">The JSON formatted body to send in this request.</param>
+    /// <returns>A Task representing the asynchronous operation, returning the response body as a string.</returns>
+    /// <exception cref="HueHttpException">Thrown when the HTTP request fails, returns a non-success status code, or contains errors in the response.</exception>
+    public async Task<string> Put(string path, string jsonBody)
+    {
+        try
+        {
+            using HttpClient client = BuildHttpClient();
+
+            var endpoint = $"{BaseEndpoint}/{path}";
+            var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await client.PutAsync(endpoint, content);
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            var errors = ParseErrors(responseContent);
+
+            if (response.IsSuccessStatusCode && errors.Count() != 0)
+            {
+                return responseContent;
+            }
+            else
+            {
+                throw BuildErrorException(ref response, "PUT", responseContent);
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new HueHttpException(ex.Message);
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="response"></param>
+    /// <param name="method"></param>
+    /// <param name="responseContent"></param>
+    /// <returns></returns>
+    private HueHttpException BuildErrorException(ref HttpResponseMessage response, string method, string responseContent)
+    {
+        var messageHeader = response.IsSuccessStatusCode ?
+                    $"HueRepository.{method}() succeeded with status code {response.StatusCode}, but errors exist in response" :
+                    $"HueRepository.{method}() failed with status code: {response.StatusCode}";
+
+        return new HueHttpException(
+            $"{messageHeader}: {ParseErrors(responseContent)}",
+            response: responseContent
+        );
+    }
+
+    /// <summary>
+    /// Builds a HTTP client to be used for calls to a HueBridge. 
+    /// </summary>
+    /// <returns>A HttpClient to be used for calls to a HueBridge.</returns>
+    private HttpClient BuildHttpClient()
+    {
+        var client = new HttpClient(HttpClientHandler);
+        client.DefaultRequestHeaders.Add("hue-application-key", Configuration.AppKey);
+        return client;
     }
 
     /// <summary>
@@ -124,7 +184,7 @@ public class HueRepository
     /// <returns>A string containing zero or more errors.</returns>
     public static string ParseErrors(JsonElement json)
     {
-        var str = ""; 
+        var str = "";
         var errorCount = 0;
 
         foreach (JsonElement errorData in json.GetProperty("errors").EnumerateArray())
@@ -133,6 +193,6 @@ public class HueRepository
             str += $"<{++errorCount}>: {errorMessage}";
         }
 
-        return str; 
+        return str;
     }
 }
