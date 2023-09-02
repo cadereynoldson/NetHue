@@ -67,14 +67,14 @@ public class HueRepository
 
             var errors = ParseErrors(responseContent);
 
-            if (response.IsSuccessStatusCode && errors.Count() != 0)
+            if (response.IsSuccessStatusCode && errors.Length == 0)
             {
                 // Only return successful response when errors are not contained. 
                 return responseContent; 
             }
             else
             {
-                // The request was not successful, handle the error
+                // The request was not successful, handle the error & fail aggressively. 
                 var messageHeader = response.IsSuccessStatusCode ?
                     $"HueRepository.GET() succeeded with status code {response.StatusCode}, but errors exist in response" :
                     $"HueRepository.GET() failed with status code: {response.StatusCode}";
