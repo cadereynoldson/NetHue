@@ -1,7 +1,20 @@
 namespace Hue;
 
+using System.Text.Json;
+using JsonConversion;
+
 public class HueLightController : HueController
 {
+
+    /// <inheritdoc/>
+    public HueLightController(string configPath) : base(configPath) { }
+
+    /// <inheritdoc/>
+    public HueLightController(HueBridgeConfiguration config) : base(config) { }
+
+    /// <inheritdoc/>
+    public HueLightController(HueRepository respository) : base(respository) { }
+  
     /// <summary>
     /// Gets a list of all lights associated with a HueBridge. 
     /// </summary>
@@ -9,14 +22,14 @@ public class HueLightController : HueController
     /// <exception cref="HueHttpException">On non-successful fetching of lights.</exception>
     public async Task<List<HueLight>> GetLights()
     {
-        // Make call, call handles error catching. 
+        // Make call
         string body = await Repository.Get("resource/light");
 
         // Fetch information from object. 
         using JsonDocument document = JsonDocument.Parse(body);
         var rootElement = document.RootElement;
 
-        // Parse light. 
+        // Parse lights
         var lights = new List<HueLight>();
         foreach (JsonElement lightData in rootElement.GetProperty("data").EnumerateArray())
         {

@@ -70,7 +70,7 @@ public class HueRepository
 
             var errors = ParseErrors(responseContent);
 
-            if (response.IsSuccessStatusCode && errors.Count() != 0)
+            if (response.IsSuccessStatusCode && errors.Length == 0)
             {
                 return responseContent;
             }
