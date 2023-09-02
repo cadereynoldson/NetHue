@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetHue", "src\NetHue.csproj", "{912C10DE-4CBC-4052-9B5B-8AD42461C1FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetHue", "test\NetHue.csproj", "{88DC7BF4-F9A7-46DD-956C-11945D855871}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetHueTest", "test\NetHueTest.csproj", "{88DC7BF4-F9A7-46DD-956C-11945D855871}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

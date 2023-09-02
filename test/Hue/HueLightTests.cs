@@ -1,6 +1,5 @@
 namespace Hue;
 
-
 public class HueLightTests
 {
 
