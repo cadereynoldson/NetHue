@@ -1,4 +1,4 @@
-using Hue;
+namespace HueTests;
 
 /// <summary>
 /// Class containing tests assuring the functionality of the HueBridgeConfiguration class. 
