@@ -56,6 +56,14 @@ public class HueLightController : HueController
         using JsonDocument document = JsonDocument.Parse(body);
         var rootElement = document.RootElement;
 
-        return new HueLight();
+        // Response will only contain one light. 
+        var lightData = rootElement.GetProperty("data").EnumerateArray().First();
+        return SimpleJson.Convert<HueLight>(lightData)!;
     }
+
+
+    // public async Task<HueLight> UpdateLight(HueLight light, HueLightStateBuilder state)
+    // {
+
+    // }
 }

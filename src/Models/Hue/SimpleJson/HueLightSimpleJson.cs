@@ -19,14 +19,17 @@ public class HueLightSimpleJsonConverter : ISimpleJsonConverter
         {
             Id = data.GetProperty("id").GetString()!,
             Name = data.GetProperty("metadata").GetProperty("name").GetString()!,
-            On = data.GetProperty("on").GetProperty("on").GetBoolean(),
-            Brightness = data.GetProperty("dimming").GetProperty("brightness").GetDouble(),
-            Cie = CieFromJsonElement(data.GetProperty("color").GetProperty("xy")),
-            ColorTemperature = new MiredColor
+            State = new HueLightState 
             {
-                // value under "mirek_valid" will indicate if there is a non-null value under "mirek"
-                MiredValue = data.GetProperty("color_temperature").GetProperty("mirek_valid").GetBoolean() ?
-                    data.GetProperty("color_temperature").GetProperty("mirek").GetInt32() : 153
+                On = data.GetProperty("on").GetProperty("on").GetBoolean(),
+                Brightness = data.GetProperty("dimming").GetProperty("brightness").GetDouble(),
+                Cie = CieFromJsonElement(data.GetProperty("color").GetProperty("xy")),
+                ColorTemperature = new MiredColor
+                {
+                    // value under "mirek_valid" will indicate if there is a non-null value under "mirek"
+                    MiredValue = data.GetProperty("color_temperature").GetProperty("mirek_valid").GetBoolean() ?
+                        data.GetProperty("color_temperature").GetProperty("mirek").GetInt32() : 153
+                },
             },
             MiredColorRange = new MiredColorRange
             {

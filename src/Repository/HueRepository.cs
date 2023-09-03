@@ -21,13 +21,6 @@ public class HueRepository
     private readonly HueBridgeConfiguration Configuration;
 
     /// <summary>
-    /// Workaround for the meantime to allow for ignoring SSL.
-    /// Note, this is because old hue bridges have a self signed certificate
-    /// and take some custom certificate checking which isn't implemented yet. 
-    /// </summary>
-    private readonly HttpClientHandler HttpClientHandler;
-
-    /// <summary>
     /// Creates a new insance of a HueRepository. 
     /// </summary>
     /// <param name="configPath">The path to the HueBridgeConfiguration compatible JSON file.</param>
@@ -41,15 +34,6 @@ public class HueRepository
     {
         BaseEndpoint = $"https://{config.Ip}/clip/v2";
         Configuration = config;
-        HttpClientHandler = new HttpClientHandler
-        {
-            ClientCertificateOptions = ClientCertificateOption.Manual,
-            ServerCertificateCustomValidationCallback =
-            (httpRequestMessage, cert, cetChain, policyErrors) =>
-            {
-                return true;
-            }
-        };
     }
 
     /// <summary>
@@ -148,7 +132,16 @@ public class HueRepository
     /// <returns>A HttpClient to be used for calls to a HueBridge.</returns>
     private HttpClient BuildHttpClient()
     {
-        var client = new HttpClient(HttpClientHandler);
+        var handler = new HttpClientHandler
+        {
+            ClientCertificateOptions = ClientCertificateOption.Manual,
+            ServerCertificateCustomValidationCallback =
+            (httpRequestMessage, cert, cetChain, policyErrors) =>
+            {
+                return true;
+            }
+        };
+        var client = new HttpClient(handler);
         client.DefaultRequestHeaders.Add("hue-application-key", Configuration.AppKey);
         return client;
     }

@@ -3,7 +3,7 @@ namespace Hue;
 /// <summary>
 /// An exception thrown when an error occuirs with a HTTP call with a HueBridge. 
 /// </summary>
-class HueHttpException : Exception {
+public class HueHttpException : Exception {
 
     /// <summary>
     /// The full response from the HueBridge. 
