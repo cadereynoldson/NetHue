@@ -23,10 +23,10 @@ public class HueLightController : HueController
     public async Task<List<HueLight>> GetLights()
     {
         // Make call
-        string body = await Repository.Get("resource/light");
+        string response = await Repository.Get("resource/light");
 
         // Fetch information from object. 
-        using JsonDocument document = JsonDocument.Parse(body);
+        using JsonDocument document = JsonDocument.Parse(response);
         var rootElement = document.RootElement;
 
         // Parse lights
@@ -50,10 +50,10 @@ public class HueLightController : HueController
     public async Task<HueLight> GetLight(string id)
     {
         // Make call
-        string body = await Repository.Get($"resource/light/{id}");
+        string response = await Repository.Get($"resource/light/{id}");
 
         // Fetch information from object. 
-        using JsonDocument document = JsonDocument.Parse(body);
+        using JsonDocument document = JsonDocument.Parse(response);
         var rootElement = document.RootElement;
 
         // Response will only contain one light. 
@@ -61,9 +61,23 @@ public class HueLightController : HueController
         return SimpleJson.Convert<HueLight>(lightData)!;
     }
 
+    /// <summary>
+    /// Updates a HueLight with a new state. Will mutate passed in HueLight object.
+    /// </summary>
+    /// <param name="light">The light to update.</param>
+    /// <param name="state"></param>
+    /// <returns>The updated/mutated passed in HueLight object.</returns>
+    public async Task<HueLight> UpdateLightState(HueLight light, HueLightStateBuilder state)
+    {
+        string body = state.ToString();
+        var response = await Repository.Put($"resource/light/{light.Id}", body);
 
-    // public async Task<HueLight> UpdateLight(HueLight light, HueLightStateBuilder state)
-    // {
+        // Fetch information from object. 
+        using JsonDocument document = JsonDocument.Parse(response);
+        var rootElement = document.RootElement;
 
-    // }
+        // Response will contain _blank_
+        var lightData = rootElement.GetProperty("data").EnumerateArray().First();
+        return light; 
+    }
 }

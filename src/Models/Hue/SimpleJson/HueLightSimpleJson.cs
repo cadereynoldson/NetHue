@@ -50,12 +50,8 @@ public class HueLightSimpleJsonConverter : ISimpleJsonConverter
         throw new NotImplementedException();
     }
 
-    private CieColor CieFromJsonElement(JsonElement data)
+    private static CieColor CieFromJsonElement(JsonElement data)
     {
-        return new CieColor
-        {
-            X = data.GetProperty("x").GetDouble(),
-            Y = data.GetProperty("y").GetDouble()
-        };
+        return new CieColor(data.GetProperty("x").GetDouble(), data.GetProperty("y").GetDouble());
     }
 }

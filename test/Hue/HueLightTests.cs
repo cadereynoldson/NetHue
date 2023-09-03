@@ -3,6 +3,8 @@ namespace HueTests;
 public class HueLightTests
 {
 
+    private readonly string LIGHT_NAME_CONTAINS = "Lamp";
+
     private readonly HueLightController Controller = new("Data/config.json");
 
     /// <summary>
@@ -46,6 +48,138 @@ public class HueLightTests
         catch (HueHttpException e)
         {
             Assert.Equal("HueRepository.GET() failed with status code: NotFound: <1>: Not Found", e.Message);
+        }
+    }
+
+    /// <summary>
+    /// Test for turning on all lights where their name contains "lamp" 
+    /// </summary>
+    /// <returns></returns>
+    [Fact]
+    public async Task TurnOffAndOnHueLights()
+    {
+        List<HueLight> hueLights = await Controller.GetLights();
+        // Filter on lights that have the name "Lamp" in it. 
+        hueLights = hueLights.Where(l => l.Name.Contains(LIGHT_NAME_CONTAINS)).ToList();
+
+        /// Turn off HueLights. 
+        foreach (HueLight light in hueLights)
+        {
+            await Controller.UpdateLightState(light, new HueLightStateBuilder().Off());
+        }
+
+        /// Turn on HueLights. 
+        foreach (HueLight light in hueLights)
+        {
+            await Controller.UpdateLightState(light, new HueLightStateBuilder().On());
+        }
+    }
+
+    /// <summary>
+    /// Test for turning all lights where their name contains the value in LIGHT_NAME_CONTAINS to a random color. 
+    /// </summary>
+    /// <returns></returns>
+    [Fact]
+    public async Task RandomHueLightColor()
+    {
+        List<HueLight> hueLights = await Controller.GetLights();
+        // Filter on lights that have the name "Lamp" in it. 
+        hueLights = hueLights.Where(l => l.Name.Contains(LIGHT_NAME_CONTAINS)).ToList();
+
+        /// Change to random colors: 
+        foreach (HueLight light in hueLights)
+        {
+            await Controller.UpdateLightState(
+                light, 
+                new HueLightStateBuilder().Color(RgbColor.Random(), light.CieColorGamut)
+            );
+        }
+    }
+    
+    /// <summary>
+    /// Test for turning all lights where their name contains the value in LIGHT_NAME_CONTAINS to a random color. 
+    /// </summary>
+    /// <returns></returns>
+    [Fact]
+    public async Task GreenHueLightColor()
+    {
+        List<HueLight> hueLights = await Controller.GetLights();
+        // Filter on lights that have the name "Lamp" in it. 
+        hueLights = hueLights.Where(l => l.Name.Contains(LIGHT_NAME_CONTAINS)).ToList();
+
+        // GREEN! 
+        var green = new RgbColor(0, 255, 0);
+        /// Change to random colors: 
+        foreach (HueLight light in hueLights)
+        {
+            await Controller.UpdateLightState(
+                light, 
+                new HueLightStateBuilder().Color(green, light.CieColorGamut)
+            );
+        }
+    }
+
+    [Fact]
+    public async Task MinBrightness()
+    {
+        List<HueLight> hueLights = await Controller.GetLights();
+        // Filter on lights that have the name "Lamp" in it. 
+        hueLights = hueLights.Where(l => l.Name.Contains(LIGHT_NAME_CONTAINS)).ToList();
+
+        foreach (HueLight light in hueLights)
+        {
+            await Controller.UpdateLightState(
+                light,
+                new HueLightStateBuilder().Brightness(0.1)
+            );
+        }
+    }
+
+    [Fact]
+    public async Task MaxBrightness()
+    {
+        List<HueLight> hueLights = await Controller.GetLights();
+        // Filter on lights that have the name "Lamp" in it. 
+        hueLights = hueLights.Where(l => l.Name.Contains(LIGHT_NAME_CONTAINS)).ToList();
+
+        foreach (HueLight light in hueLights)
+        {
+            await Controller.UpdateLightState(
+                light,
+                new HueLightStateBuilder().Brightness(100)
+            );
+        }
+    }
+
+    [Fact]
+    public async Task MinMired()
+    {
+        List<HueLight> hueLights = await Controller.GetLights();
+        // Filter on lights that have the name "Lamp" in it. 
+        hueLights = hueLights.Where(l => l.Name.Contains(LIGHT_NAME_CONTAINS)).ToList();
+
+        foreach (HueLight light in hueLights)
+        {
+            await Controller.UpdateLightState(
+                light,
+                new HueLightStateBuilder().Color(new MiredColor {MiredValue = 153})
+            );
+        }
+    }
+
+    [Fact]
+    public async Task MaxMired()
+    {
+        List<HueLight> hueLights = await Controller.GetLights();
+        // Filter on lights that have the name "Lamp" in it. 
+        hueLights = hueLights.Where(l => l.Name.Contains(LIGHT_NAME_CONTAINS)).ToList();
+
+        foreach (HueLight light in hueLights)
+        {
+            await Controller.UpdateLightState(
+                light,
+                new HueLightStateBuilder().Color(new MiredColor {MiredValue = 500})
+            );
         }
     }
 }

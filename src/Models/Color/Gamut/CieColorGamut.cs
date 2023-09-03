@@ -1,3 +1,5 @@
+namespace Hue; 
+
 /// <summary>
 /// Class representing the color gamut of a CIE color space. 
 /// For those not familiar with color gamuts, forms a triangle on the CIE color spectrum.

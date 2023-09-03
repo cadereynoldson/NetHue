@@ -1,13 +1,11 @@
-using System.Reflection.Metadata;
-using System.Security.Cryptography.X509Certificates;
 using Newtonsoft.Json.Linq;
 
-namespace Hue; 
+namespace Hue;
 
 public class HueLightStateBuilder
 {
 
-    private JObject State;
+    private readonly JObject State;
 
     public HueLightStateBuilder()
     {
@@ -20,7 +18,7 @@ public class HueLightStateBuilder
     /// <returns></returns>
     public HueLightStateBuilder On()
     {
-        AddOrUpdateProperty("on", true);
+        AddOrUpdateProperty("on", new JObject(new JProperty("on", true)));
         return this;
     }
 
@@ -30,31 +28,58 @@ public class HueLightStateBuilder
     /// <returns>This HueLightStateBuilder</returns>
     public HueLightStateBuilder Off()
     {
-        AddOrUpdateProperty("on", false);
+        AddOrUpdateProperty("on", new JObject(new JProperty("on", false)));
         return this;
     }
 
     /// <summary>
-    /// Changes the color to CIE. 
+    /// Changes the color of a light to a specific CIE color. 
+    /// </summary>
+    /// <param name="color">The color to change the light to.</param>
+    /// <returns></returns>
+    public HueLightStateBuilder Color(CieColor color)
+    {
+        AddOrUpdateProperty(
+            "color", 
+            new JObject(
+                new JProperty(
+                    "xy", 
+                    new JObject(
+                        new JProperty("x", color.X),
+                        new JProperty("y", color.Y)
+                    )
+                )
+            )
+        );
+        return this;
+    }
+
+    /// <summary>
+    /// Changes the color of a light to a RGB color. 
+    /// </summary>
+    /// <param name="color">The RGB color to change the light to.</param>
+    /// <param name="cieColorGamut">The CIE color gamut to convert this color to.</param>
+    /// <returns></returns>
+    public HueLightStateBuilder Color(RgbColor color, CieColorGamut cieColorGamut)
+    {
+        return Color(color.ToCie(cieColorGamut));
+    }
+
+    /// <summary>
+    /// Changes the color of a light to a MiredColor. 
     /// </summary>
     /// <param name="color"></param>
     /// <returns></returns>
-    public HueLightStateBuilder Cie(CieColor color)
+    public HueLightStateBuilder Color(MiredColor color)
     {
-        var cie = new JObject()
-        {
-            { "x", color.X },
-            { "y", color.Y }
-        };
-
-        AddOrUpdateProperty("color", new JProperty("xy", cie));
+        AddOrUpdateProperty("color_temperature", new JObject(new JProperty("mirek", color.MiredValue)));
         return this; 
-    } 
+    }
 
-    public HueLightStateBuilder Brightness(float brightness)
+    public HueLightStateBuilder Brightness(double brightness)
     {
-        AddOrUpdateProperty("dimming", new JProperty("brightness", brightness));
-        return this; 
+        AddOrUpdateProperty("dimming", new JObject(new JProperty("brightness", brightness)));
+        return this;
     }
 
     private void AddOrUpdateProperty(string property, object value)
