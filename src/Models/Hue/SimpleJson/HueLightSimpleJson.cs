@@ -20,17 +20,12 @@ public class HueLightSimpleJsonConverter : ISimpleJsonConverter
         {
             Id = data.GetProperty("id").GetString()!,
             Name = data.GetProperty("metadata").GetProperty("name").GetString()!,
-            State = new HueLightState 
+            State = new HueLightState
             {
                 On = data.GetProperty("on").GetProperty("on").GetBoolean(),
                 Brightness = data.GetProperty("dimming").GetProperty("brightness").GetDouble(),
                 Cie = ParseCieColor(data.GetProperty("color").GetProperty("xy")),
-                ColorTemperature = new MiredColor
-                {
-                    // value under "mirek_valid" will indicate if there is a non-null value under "mirek"
-                    MiredValue = data.GetProperty("color_temperature").GetProperty("mirek_valid").GetBoolean() ?
-                        data.GetProperty("color_temperature").GetProperty("mirek").GetInt32() : 153
-                },
+                ColorTemperature = ParseMiredColor(data.GetProperty("color_temperature").GetProperty("mirek")),
                 Dynamics = new HueLightDynamics
                 {
                     Status = data.GetProperty("dynamics").GetProperty("status").GetString(),
@@ -42,7 +37,8 @@ public class HueLightSimpleJsonConverter : ISimpleJsonConverter
                 Mode = data.GetProperty("mode").GetString()!,
                 Gradient = ParseHueLightGradient(data),
                 Effect = ParseHueLightEffect(data),
-                TimedEffect = ParseHueLightTimedEffect(data)
+                TimedEffect = ParseHueLightTimedEffect(data),
+                Powerup = ParsePowerup(data) 
             },
             MiredColorRange = new MiredColorRange
             {
@@ -67,6 +63,51 @@ public class HueLightSimpleJsonConverter : ISimpleJsonConverter
     private static CieColor ParseCieColor(JsonElement data)
     {
         return new CieColor(data.GetProperty("x").GetDouble(), data.GetProperty("y").GetDouble());
+    }
+
+    private static MiredColor ParseMiredColor(JsonElement data, int onFail = 153)
+    {
+        int value = onFail;
+        try {
+            value = data.GetInt32()!;
+        } catch (Exception) {}
+
+        return new MiredColor
+        {
+            MiredValue = value
+        };
+    }
+
+    private static List<string> ParseStringList(JsonElement data)
+    {
+        var l = new List<string>();
+        foreach (JsonElement str in data.EnumerateArray())
+        {
+            l.Add(str.GetString()!);
+        }
+        return l;
+    }
+
+    private static List<CieColor> ParseCieColorList(JsonElement data)
+    {
+        var l = new List<CieColor>();
+        foreach (JsonElement color in data.EnumerateArray())
+        {
+            l.Add(ParseCieColor(color.GetProperty("xy")));
+        }
+        return l;
+    }
+
+    private static int ParseIntOrDefault(JsonElement data, int onFail = 0)
+    {
+        try
+        {
+            return data.GetInt32();
+        }
+        catch (Exception)
+        {
+            return 0;
+        }
     }
 
     private static HueLightEffect? ParseHueLightEffect(JsonElement data)
@@ -138,32 +179,138 @@ public class HueLightSimpleJsonConverter : ISimpleJsonConverter
         return null;
     }
 
-    private static List<string> ParseStringList(JsonElement data)
+    private static HueLightPowerup? ParsePowerup(JsonElement data)
     {
-        var l = new List<string>();
-        foreach (JsonElement str in data.EnumerateArray())
+        
+        if (data.TryGetProperty("powerup", out JsonElement powerup))
         {
-            l.Add(str.GetString()!);
+            // Dimming may or may not exist: 
+            double dimming = 0;
+            HueLightPowerup.DimmingMode? dimmingBehavior = null;
+            CieColor? cieColor = null;
+            MiredColor? miredColor = null;
+            HueLightPowerup.ColorMode? colorMode = null;
+            
+            if (powerup.TryGetProperty("dimming", out JsonElement dimmingElement))
+            {
+                if (dimmingElement.TryGetProperty("dimming", out JsonElement dimmingVals))
+                {
+                    dimming = dimmingVals.GetProperty("brightness").GetDouble();
+                }
+                // Required element. 
+                dimmingBehavior = ParseDimmingBehavior(dimmingElement.GetProperty("mode"));
+            }
+
+            if (powerup.TryGetProperty("color", out JsonElement color))
+            {
+                if (color.TryGetProperty("color", out JsonElement colorElement))
+                {
+                    cieColor = ParseCieColor(colorElement.GetProperty("xy"));
+                }
+                if (color.TryGetProperty("color_temperature", out JsonElement tempElement))
+                {
+                    miredColor = ParseMiredColor(tempElement.GetProperty("mirek"));
+                }
+                // Required element
+                colorMode = ParseColorBehavior(color.GetProperty("mode"));
+            }
+
+            return new HueLightPowerup
+            {
+                Preset = ParsePowerupPreset(powerup.GetProperty("preset")),
+                Configured = powerup.GetProperty("configured").GetBoolean(),
+                On = powerup.GetProperty("on").GetProperty("on").GetProperty("on").GetBoolean(),
+                OnBehavior = ParseOnBehavior(powerup.GetProperty("on").GetProperty("mode")),
+                Dimming = dimming,
+                DimmingBehavior = dimmingBehavior,
+                CieColor = cieColor,
+                ColorTemperature = miredColor,
+                ColorBehavior = colorMode
+            };
         }
-        return l;
+        return null;
     }
 
-    private static List<CieColor> ParseCieColorList(JsonElement data)
+    private static HueLightPowerup.PowerupPreset ParsePowerupPreset(JsonElement data)
     {
-        var l = new List<CieColor>();
-        foreach (JsonElement color in data.EnumerateArray())
+        string preset = data.GetString()!;
+        if (preset.Equals("safety"))
         {
-            l.Add(ParseCieColor(color.GetProperty("xy")));
+            return HueLightPowerup.PowerupPreset.SAFETY;
         }
-        return l;
+        else if (preset.Equals("powerfail"))
+        {
+            return HueLightPowerup.PowerupPreset.POWERFAIL;
+        }
+        else if (preset.Equals("last_on_state"))
+        {
+            return HueLightPowerup.PowerupPreset.LAST_ON_STATE;
+        }
+        else
+        {
+            return HueLightPowerup.PowerupPreset.CUSTOM;
+        }
     }
 
-    private static int ParseIntOrDefault(JsonElement data, int onFail = 0)
+    /// <summary>
+    /// Parses HueLightPowerup.OnMode enum from a json element containing a string.
+    /// </summary>
+    /// <param name="data">The data to convert to a HueLightPowerup.OnMode enum</param>
+    /// <returns>HueLightPowerup.OnMode, returns HueLightPowerup.OnMode.PREVIOUS by default.</returns>
+    private static HueLightPowerup.OnMode ParseOnBehavior(JsonElement data)
     {
-        try {
-            return data.GetInt32();
-        } catch (Exception) {
-            return 0;
+        string behavior = data.GetString()!;
+        if (behavior.Equals("on"))
+        {
+            return HueLightPowerup.OnMode.ON;
+        }
+        else if (behavior.Equals("toggle"))
+        {
+            return HueLightPowerup.OnMode.TOGGLE;
+        }
+        else
+        {
+            return HueLightPowerup.OnMode.PREVIOUS;
+        }
+    }
+
+    /// <summary>
+    /// Parses a HueLightPowerup.DimmingMode enum from a json element directly containing a string. 
+    /// </summary>
+    /// <param name="data">The data to convert to a HueLightPowerup.DimmingMode enum</param>
+    /// <returns>HueLightPowerup.DimmingMode, returns HueLightPowerup.DimmingMode.PREVIOUS by default.</returns>
+    private static HueLightPowerup.DimmingMode ParseDimmingBehavior(JsonElement data)
+    {
+        string behavior = data.GetString()!;
+        if (behavior.Equals("dimming"))
+        {
+            return HueLightPowerup.DimmingMode.DIMMING;
+        }
+        else
+        {
+            return HueLightPowerup.DimmingMode.PREVIOUS;
+        }
+    }
+
+    /// <summary>
+    /// Parses a HueLightPowerup.ColorMode enum from a json element that directly contains a string. 
+    /// </summary>
+    /// <param name="data">The data to parse a HueLightPowerup.ColorMode enum from.</param>
+    /// <returns>HueLightPowerup.ColorMode, by default returns HueLightPowerup.ColorMode.PREVIOUS</returns>
+    private static HueLightPowerup.ColorMode ParseColorBehavior(JsonElement data)
+    {
+        string behavior = data.GetString()!;
+        if (behavior.Equals("color_temperature"))
+        {
+            return HueLightPowerup.ColorMode.MIRED;
+        }
+        else if (behavior.Equals("color"))
+        {
+            return HueLightPowerup.ColorMode.CIE;
+        }
+        else
+        {
+            return HueLightPowerup.ColorMode.PREVIOUS;
         }
     }
 }

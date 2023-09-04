@@ -34,22 +34,22 @@ public record HueLightPowerup
     /// <summary>
     /// The on startup dimming behavior of the lamp. 
     /// </summary>
-    public double DimmingBehavior { get; set; } = default!;
+    public DimmingMode? DimmingBehavior { get; set; } = default!;
 
     /// <summary>
     /// The on startup color behavior of the lamp. 
     /// </summary>
-    public ColorMode ColorBehavior { get; set; } = default!;
+    public ColorMode? ColorBehavior { get; set; } = default!;
 
     /// <summary>
     /// The MiredColor to set the HueLight to on startup. 
     /// </summary>
-    public MiredColor ColorTemperature { get; set; } = default!;
+    public MiredColor? ColorTemperature { get; set; } = default!;
 
     /// <summary>
     /// The CieColor to set the HueLight to on startup. 
     /// </summary>
-    public CieColor CieColor { get; set; } = default!;
+    public CieColor? CieColor { get; set; } = default!;
 
     /// <summary>
     /// Enum containing information on presets for power up operations.

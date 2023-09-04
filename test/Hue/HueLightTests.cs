@@ -205,4 +205,20 @@ public class HueLightTests
             );
         }
     }
+
+    [Fact]
+    public async Task GetLightsWithPowerupMode()
+    {
+        List<HueLight> hueLights = await Controller.GetLights();
+        hueLights = hueLights.Where(l => l.State.Powerup != null).ToList();
+        hueLights = hueLights.Where(l => l.State.Powerup!.Preset != HueLightPowerup.PowerupPreset.SAFETY).ToList();
+    
+        foreach (HueLight light in hueLights)
+        {
+            await Controller.UpdateLightState(
+                light,
+                new HueLightStateBuilder().Color(new MiredColor {MiredValue = 500})
+            );
+        }
+    }
 }

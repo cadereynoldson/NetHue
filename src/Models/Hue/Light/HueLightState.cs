@@ -43,20 +43,25 @@ public record HueLightState
     /// <summary>
     /// The state of an active signal. Will be non-null if device allows for, or has been configured for this.
     /// </summary>
-    public HueLightSignaling? Signaling { get; set; } = default!;
+    public HueLightSignaling? Signaling { get; set; }
 
     /// <summary>
     /// The state of a HueLight gradient. Will be non-null if device allows for, or has been configured for this.
     /// </summary>
-    public HueLightGradient? Gradient { get; set; } = default!; 
+    public HueLightGradient? Gradient { get; set; } 
 
     /// <summary>
     /// The state of a HueLight effect. Will be non-null if currently being used. 
     /// </summary>
-    public HueLightEffect? Effect {get; set; } = default!;
+    public HueLightEffect? Effect {get; set; }
 
     /// <summary>
     /// The state of a timed HueLight effect. Will be non-null if currently being used. 
     /// </summary>
-    public HueLightTimedEffect? TimedEffect { get; set; } = default!;
+    public HueLightTimedEffect? TimedEffect { get; set; }
+
+    /// <summary>
+    /// The state of what will happen to a HueLight on powerup. Will be non-null if currently being used. 
+    /// </summary>
+    public HueLightPowerup? Powerup { get; set; }
 }
