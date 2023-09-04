@@ -1,4 +1,4 @@
-namespace Hue;
+namespace NetHue;
 
 /// <summary>
 /// Exception thrown when an invalid configuration was created for a HueBridge. 

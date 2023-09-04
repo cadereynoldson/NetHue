@@ -1,4 +1,4 @@
-namespace Hue; 
+namespace NetHue; 
 
 /// <summary>
 /// Class representing the color gamut of a CIE color space. 

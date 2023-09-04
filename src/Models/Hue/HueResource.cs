@@ -1,11 +1,9 @@
-using System.Text.Json.Serialization;
-
-namespace Hue;
+namespace NetHue;
 
 /// <summary>
 /// Class containing shared information between all types of Hue products. 
 /// </summary>
-public abstract class HueResource {
+public abstract record HueResource {
 
     /// <summary>
     /// The Id of this model, provided from the Hue API V2. 

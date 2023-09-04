@@ -1,4 +1,4 @@
-namespace Hue;
+namespace NetHue;
 
 using System.Text.Json;
 using JsonConversion;

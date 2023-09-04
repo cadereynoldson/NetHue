@@ -1,4 +1,4 @@
-namespace Hue;
+namespace NetHue;
 
 /// <summary>
 /// Represents a color in CIE color space. 

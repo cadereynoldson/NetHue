@@ -119,6 +119,29 @@ public class HueLightTests
         }
     }
 
+    /// <summary>
+    /// Test for turning all lights where their name contains the value in LIGHT_NAME_CONTAINS to a random color. 
+    /// </summary>
+    /// <returns></returns>
+    [Fact]
+    public async Task TestHueLightColor()
+    {
+        List<HueLight> hueLights = await Controller.GetLights();
+        // Filter on lights that have the name "Lamp" in it. 
+        hueLights = hueLights.Where(l => l.Name.Contains(LIGHT_NAME_CONTAINS)).ToList();
+
+        var color = RgbColor.Teal;
+
+        /// Change all lights to a color: 
+        foreach (HueLight light in hueLights)
+        {
+            await Controller.UpdateLightState(
+                light, 
+                new HueLightStateBuilder().Color(color, light.CieColorGamut)
+            );
+        }
+    }
+
     [Fact]
     public async Task MinBrightness()
     {

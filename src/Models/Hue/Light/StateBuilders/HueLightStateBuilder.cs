@@ -1,6 +1,6 @@
 using Newtonsoft.Json.Linq;
 
-namespace Hue;
+namespace NetHue;
 
 public class HueLightStateBuilder
 {

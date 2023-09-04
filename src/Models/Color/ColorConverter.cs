@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using Newtonsoft.Json.Serialization;
 
-namespace Hue; 
+namespace NetHue; 
 
 public class ColorConverter
 {

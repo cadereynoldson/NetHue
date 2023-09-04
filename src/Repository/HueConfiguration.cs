@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace Hue;
+namespace NetHue;
 
 /// <summary>
 /// Class containing the information for accessing a HueBridge via the Clip API V2.

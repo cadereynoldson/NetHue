@@ -1,7 +1,7 @@
 using System.Reflection.Metadata.Ecma335;
 using System.Text.Json;
 
-namespace Hue;
+namespace NetHue;
 /// <summary>
 /// Class which handles making HTTP requests to a hue bridge on the network this device is connected to.
 /// </summary>

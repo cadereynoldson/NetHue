@@ -1,4 +1,4 @@
-namespace Hue;
+namespace NetHue;
 
 using JsonConversion;
 
@@ -30,17 +30,12 @@ using JsonConversion;
 /// </item>
 /// </list>
 /// TODO list from https://developers.meethue.com/develop/hue-api-v2/api-reference/#resource_light_get
-/// - dynamics
-/// - alert
-/// - signaling
-/// - mode
-/// - gradient
 /// - effects
 /// - timed effects
 /// - powerup 
 /// </summary>
 [SimpleJsonConverter(typeof(HueLightSimpleJsonConverter))]
-public class HueLight : HueResource {
+public record HueLight : HueResource {
 
     /// <summary>
     /// The state of the HueLight, contains values such as on, the current CIE color, etc. 
@@ -48,13 +43,17 @@ public class HueLight : HueResource {
     public HueLightState State { get; set; } = default!; 
 
     /// <summary>
-    /// The range of mired colors this light can produce.
+    /// The range of mired colors this HueLight can produce.
     /// </summary>
     public MiredColorRange MiredColorRange { get; init; } = default!;
 
     /// <summary>
-    /// The color gamut of CIE colors this light can produce. 
+    /// The color gamut of CIE colors this HueLight can produce. 
     /// </summary>
     public CieColorGamut CieColorGamut { get; init; } = default!; 
 
+    /// <summary>
+    /// Alert effects that the HueLight supports.
+    /// </summary>
+    public List<string> AlertActionValues { get; init; } = default!;
 }

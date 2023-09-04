@@ -1,4 +1,4 @@
-namespace Hue;
+namespace NetHue;
 
 /// <summary>
 /// An exception thrown when an error occuirs with a HTTP call with a HueBridge. 

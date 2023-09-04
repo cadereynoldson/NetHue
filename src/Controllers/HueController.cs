@@ -1,4 +1,4 @@
-namespace Hue; 
+namespace NetHue; 
 
 /// <summary>
 /// Class which handles getting various types on information from a HueBridge.
