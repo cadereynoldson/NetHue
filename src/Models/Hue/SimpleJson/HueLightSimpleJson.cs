@@ -1,25 +1,24 @@
 namespace NetHue;
 
-using System.Net.NetworkInformation;
 using System.Text.Json;
-using JsonConversion;
 
 /// <summary>
-/// Class which handles parsing Json 
+/// Class which handles parsing Json to HueLights. 
 /// </summary>
-public class HueLightSimpleJsonConverter : ISimpleJsonConverter
+public class HueLightSimpleJsonConverter : HueSimpleJsonConverter
 {
     /// <summary>
     /// Creates a HueLight from dynamic JSON data provided from the Hue API. 
     /// </summary>
     /// <param name="data">The data to create a HueLight from. </param>
     /// <returns></returns>
-    public object Convert(JsonElement data)
+    public override object Convert(JsonElement data)
     {
         return new HueLight
         {
-            Id = data.GetProperty("id").GetString()!,
-            Name = data.GetProperty("metadata").GetProperty("name").GetString()!,
+            Id = ParseId(data),
+            Name = ParseName(data),
+            Archetype = ParseArchetype(data),
             State = new HueLightState
             {
                 On = data.GetProperty("on").GetProperty("on").GetBoolean(),
@@ -55,59 +54,9 @@ public class HueLightSimpleJsonConverter : ISimpleJsonConverter
         };
     }
 
-    public string ToJson(object data)
+    public override string ToJson(object data)
     {
         throw new NotImplementedException();
-    }
-
-    private static CieColor ParseCieColor(JsonElement data)
-    {
-        return new CieColor(data.GetProperty("x").GetDouble(), data.GetProperty("y").GetDouble());
-    }
-
-    private static MiredColor ParseMiredColor(JsonElement data, int onFail = 153)
-    {
-        int value = onFail;
-        try {
-            value = data.GetInt32()!;
-        } catch (Exception) {}
-
-        return new MiredColor
-        {
-            MiredValue = value
-        };
-    }
-
-    private static List<string> ParseStringList(JsonElement data)
-    {
-        var l = new List<string>();
-        foreach (JsonElement str in data.EnumerateArray())
-        {
-            l.Add(str.GetString()!);
-        }
-        return l;
-    }
-
-    private static List<CieColor> ParseCieColorList(JsonElement data)
-    {
-        var l = new List<CieColor>();
-        foreach (JsonElement color in data.EnumerateArray())
-        {
-            l.Add(ParseCieColor(color.GetProperty("xy")));
-        }
-        return l;
-    }
-
-    private static int ParseIntOrDefault(JsonElement data, int onFail = 0)
-    {
-        try
-        {
-            return data.GetInt32();
-        }
-        catch (Exception)
-        {
-            return 0;
-        }
     }
 
     private static HueLightEffect? ParseHueLightEffect(JsonElement data)
