@@ -86,7 +86,7 @@ public class HueLightTests
         // Filter on lights that have the name "Lamp" in it. 
         hueLights = hueLights.Where(l => l.Name.Contains(LIGHT_NAME_CONTAINS)).ToList();
 
-        /// Change to random colors: 
+        // Change to random colors: 
         foreach (HueLight light in hueLights)
         {
             await Controller.UpdateLightState(
@@ -107,14 +107,12 @@ public class HueLightTests
         // Filter on lights that have the name "Lamp" in it. 
         hueLights = hueLights.Where(l => l.Name.Contains(LIGHT_NAME_CONTAINS)).ToList();
 
-        // GREEN! 
-        var green = new RgbColor(0, 255, 0);
         /// Change to random colors: 
         foreach (HueLight light in hueLights)
         {
             await Controller.UpdateLightState(
                 light, 
-                new HueLightStateBuilder().Color(green, light.CieColorGamut)
+                new HueLightStateBuilder().Color(RgbColor.Green, light.CieColorGamut)
             );
         }
     }
@@ -219,6 +217,27 @@ public class HueLightTests
                 light,
                 new HueLightStateBuilder().Color(new MiredColor {MiredValue = 500})
             );
+        }
+    }
+
+    [Fact]
+    public async Task PartyMode()
+    {
+        List<HueLight> hueLights = await Controller.GetLights();
+        // Filter on lights that have the name "Lamp" in it. 
+        hueLights = hueLights.Where(l => l.Name.Contains(LIGHT_NAME_CONTAINS)).ToList();
+
+        for (int i = 0; i < 10; i++)
+        {
+            /// Change to random colors: 
+            foreach (HueLight light in hueLights)
+            {
+                await Controller.UpdateLightState(
+                    light, 
+                    new HueLightStateBuilder().Color(RgbColor.Random(), light.CieColorGamut)
+                );
+            }
+            Thread.Sleep(1000); 
         }
     }
 }

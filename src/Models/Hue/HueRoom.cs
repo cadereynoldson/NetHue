@@ -1,7 +1,7 @@
 namespace NetHue;
 
 /// <summary>
-/// Record containing data on a configured "room"
+/// Record containing data on a configured "room". Rooms group devices and each device can only be part of one room. 
 /// </summary>
 public record HueRoom : HueResource
 {

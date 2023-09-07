@@ -23,7 +23,7 @@ public class HueLightSimpleJsonConverter : HueSimpleJsonConverter
             {
                 On = data.GetProperty("on").GetProperty("on").GetBoolean(),
                 Brightness = data.GetProperty("dimming").GetProperty("brightness").GetDouble(),
-                Cie = ParseCieColor(data.GetProperty("color").GetProperty("xy")),
+                Color = ParseCieColor(data.GetProperty("color").GetProperty("xy")),
                 ColorTemperature = ParseMiredColor(data.GetProperty("color_temperature").GetProperty("mirek")),
                 Dynamics = new HueLightDynamics
                 {
@@ -102,8 +102,11 @@ public class HueLightSimpleJsonConverter : HueSimpleJsonConverter
 
             return new HueLightGradient
             {
-                Points = colors,
-                GradientMode = gradient.GetProperty("mode").GetString()!,
+                Gradient = new HueGradient
+                {
+                    Points = colors,
+                    GradientMode = gradient.GetProperty("mode").GetString()!,
+                },
                 GradientPointsCapable = ParseIntOrDefault(gradient.GetProperty("points_capable")),
                 GradientModeValues = ParseStringList(gradient.GetProperty("mode_values")),
                 GradientPixelCount = ParseIntOrDefault(gradient.GetProperty("pixel_count"))
@@ -170,8 +173,8 @@ public class HueLightSimpleJsonConverter : HueSimpleJsonConverter
                 Configured = powerup.GetProperty("configured").GetBoolean(),
                 On = powerup.GetProperty("on").GetProperty("on").GetProperty("on").GetBoolean(),
                 OnBehavior = ParseOnBehavior(powerup.GetProperty("on").GetProperty("mode")),
-                Dimming = dimming,
-                DimmingBehavior = dimmingBehavior,
+                Brightness = dimming,
+                BrightnessBehavior = dimmingBehavior,
                 CieColor = cieColor,
                 ColorTemperature = miredColor,
                 ColorBehavior = colorMode

@@ -4,14 +4,14 @@ using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using Newtonsoft.Json.Serialization;
 
-namespace NetHue; 
+namespace NetHue;
 
 public class ColorConverter
 {
     private static double CieCrossProduct(CieColor p1, CieColor p2)
     {
         return p1.X * p2.Y - p1.Y * p2.X;
-    } 
+    }
 
     private static double CieDistance(CieColor p1, CieColor p2)
     {
@@ -22,10 +22,10 @@ public class ColorConverter
 
     private static bool CieInGamut(CieColor cie, CieColorGamut gamut)
     {
-        var v1 = new CieColor(gamut.Green.X - gamut.Red.X, gamut.Green.Y - gamut.Red.Y);
-        var v2 = new CieColor(gamut.Blue.X - gamut.Red.X, gamut.Blue.Y - gamut.Red.Y);
+        var v1 = new CieColor { X = gamut.Green.X - gamut.Red.X, Y = gamut.Green.Y - gamut.Red.Y };
+        var v2 = new CieColor { X = gamut.Blue.X - gamut.Red.X, Y = gamut.Blue.Y - gamut.Red.Y };
 
-        var q = new CieColor(cie.X - gamut.Red.X, cie.Y - gamut.Red.Y);
+        var q = new CieColor { X = cie.X - gamut.Red.X, Y = cie.Y - gamut.Red.Y };
         var s = CieCrossProduct(q, v2) / CieCrossProduct(v1, v2);
         var t = CieCrossProduct(v1, q) / CieCrossProduct(v2, v2);
 
@@ -34,12 +34,12 @@ public class ColorConverter
 
     private static CieColor ClosestCieToCieLine(CieColor cie, CieColor p1, CieColor p2)
     {
-        var ap = new CieColor(cie.X - p1.X, cie.Y - p1.Y);
-        var ab = new CieColor(p2.X - p1.X, p2.Y - cie.Y);
+        var ap = new CieColor { X = cie.X - p1.X, Y = cie.Y - p1.Y };
+        var ab = new CieColor { X = p2.X - p1.X, Y = p2.Y - cie.Y };
         var ab2 = ab.X * ab.X + ab.Y * ab.Y;
         var abAb = ap.X * ab.X + ap.Y * ab.Y;
-        var t = abAb / ab2; 
-        
+        var t = abAb / ab2;
+
         if (t < 0.0)
         {
             t = 0.0;
@@ -49,7 +49,7 @@ public class ColorConverter
             t = 1.0;
         }
 
-        return new CieColor(p1.X + ab.X * t, p1.Y + ab.Y * t);
+        return new CieColor { X = p1.X + ab.X * t, Y = p1.Y + ab.Y * t };
     }
 
     private static CieColor ClosestCieInGamut(CieColor cie, CieColorGamut gamut)
@@ -79,9 +79,13 @@ public class ColorConverter
         }
 
         // Return a CIE value which is within reach of the lamp
-        return new CieColor(closestPoint.X, closestPoint.Y);
-    } 
-    
+        return new CieColor
+        {
+            X = closestPoint.X,
+            Y = closestPoint.Y
+        };
+    }
+
     public static CieColor CieFromRgb(RgbColor rgb, CieColorGamut gamut)
     {
         double r = rgb.R / 255.0;
@@ -99,14 +103,14 @@ public class ColorConverter
         double cx = x / (x + y + z);
         double cy = y / (x + y + z);
 
-        var color = new CieColor(cx, cy);
-        
+        var color = new CieColor { X = cx, Y = cy };
+
         if (!CieInGamut(color, gamut))
         {
             color = ClosestCieInGamut(color, gamut);
         }
 
-        return color; 
+        return color;
     }
 
     public static RgbColor RgbFromCieAndBrightness(CieColor cie, CieColorGamut gamut, double brightness = 1)

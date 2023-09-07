@@ -42,7 +42,7 @@ public abstract class HueSimpleJsonConverter : ISimpleJsonConverter
     /// <returns>The name of a HueResource.</returns>
     protected static CieColor ParseCieColor(JsonElement data)
     {
-        return new CieColor(data.GetProperty("x").GetDouble(), data.GetProperty("y").GetDouble());
+        return new CieColor { X = data.GetProperty("x").GetDouble(), Y = data.GetProperty("y").GetDouble() };
     }
 
     /// <summary>
@@ -99,7 +99,8 @@ public abstract class HueSimpleJsonConverter : ISimpleJsonConverter
         var l = new List<HueResourceIdentifier>();
         foreach (JsonElement resource in data.EnumerateArray())
         {
-            l.Add(new HueResourceIdentifier{
+            l.Add(new HueResourceIdentifier
+            {
                 Id = resource.GetProperty("rid").GetString()!,
                 ResourceType = resource.GetProperty("rtype").GetString()!
             });

@@ -28,7 +28,7 @@ public record HueLightState
     /// <summary>
     /// The CIE color of this <see cref="HueLight"/>. 
     /// </summary>
-    public CieColor Cie { get; set; } = default!; 
+    public CieColor Color { get; set; } = default!; 
 
     /// <summary>
     /// The mired color temperature of this <see cref="HueLight"/>.

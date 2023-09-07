@@ -2,7 +2,7 @@
 /// Represents a mired color temperature.
 /// Indicates the colour temperature shift provided by a filter for a light source.
 /// </summary>
-public class MiredColor
+public record MiredColor
 {
 
     /// <summary>

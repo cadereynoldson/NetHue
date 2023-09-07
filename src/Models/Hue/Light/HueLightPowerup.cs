@@ -29,12 +29,12 @@ public record HueLightPowerup
     /// <summary>
     /// The brightness to set the light to on power up. 
     /// </summary>
-    public double Dimming { get; set; } = default!;
+    public double? Brightness { get; set; }
 
     /// <summary>
     /// The on startup dimming behavior of the lamp. 
     /// </summary>
-    public DimmingMode? DimmingBehavior { get; set; } = default!;
+    public DimmingMode? BrightnessBehavior { get; set; } = default!;
 
     /// <summary>
     /// The on startup color behavior of the lamp. 

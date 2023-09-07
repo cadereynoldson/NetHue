@@ -3,6 +3,7 @@ using JsonConversion;
 
 namespace NetHue;
 
+
 public class HueRoomController : HueController
 {
     /// <inheritdoc/>
@@ -14,6 +15,10 @@ public class HueRoomController : HueController
     /// <inheritdoc/>
     public HueRoomController(HueRepository respository) : base(respository) { }
 
+    /// <summary>
+    /// Gets all of the rooms configured with the connected hue bridge. 
+    /// </summary>
+    /// <returns>A list of HueRooms./returns>
     public async Task<List<HueRoom>> GetRooms()
     {
         var response = await Repository.Get("/resource/room");
