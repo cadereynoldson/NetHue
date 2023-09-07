@@ -8,7 +8,7 @@ public record HueScenePalette
     /// <summary>
     /// The colors of the palette. List of length 0 to 9. 
     /// </summary>
-    public List<HuePaletteColor> Colors { get; set; } = default!;
+    public List<HuePaletteCieColor> Colors { get; set; } = default!;
 
     /// <summary>
     /// The dimming level of the palette. Should be of length 0 or 1. 
@@ -20,7 +20,7 @@ public record HueScenePalette
     /// The color temperature of the palette. Should be of length 0 or 1. 
     /// API returns a list, store as a list for future release compatibility.
     /// </summary>
-    public List<HuePaletteColorTemperature> ColorTemperature { get; set; } = default!;
+    public List<HuePaletteMiredColor> ColorTemperature { get; set; } = default!;
 
     /// <summary>
     /// The effects of the palette. List of length 0 to 3. 

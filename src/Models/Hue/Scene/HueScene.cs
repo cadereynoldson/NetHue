@@ -13,6 +13,11 @@ public record HueScene : HueResource
     public HueResourceIdentifier Group { get; set; } = default!;
 
     /// <summary>
+    /// The group of colors that describe the palette of colors to be used when playing dynamics. 
+    /// </summary>
+    public HueScenePalette? Palette { get; set; }
+
+    /// <summary>
     /// The speed of the dynamic palette for this scene. 
     /// </summary>
     public double Speed { get; set; } = default!;

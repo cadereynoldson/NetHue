@@ -1,9 +1,3 @@
-using System.Drawing;
-using System.Net;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
-using Newtonsoft.Json.Serialization;
-
 namespace NetHue;
 
 public class ColorConverter

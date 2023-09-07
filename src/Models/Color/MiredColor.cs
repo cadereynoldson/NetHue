@@ -1,3 +1,5 @@
+namespace NetHue;
+
 /// <summary>
 /// Represents a mired color temperature.
 /// Indicates the colour temperature shift provided by a filter for a light source.

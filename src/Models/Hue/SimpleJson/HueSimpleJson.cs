@@ -47,6 +47,45 @@ public abstract class HueSimpleJsonConverter : ISimpleJsonConverter
     }
 
     /// <summary>
+    /// Parses a HuePaletteColor from a JsonElement directly containing the properties "color" and "dimming"
+    /// </summary>
+    /// <param name="data">The data to parse the HuePaletteColor from.</param>
+    /// <returns>A HuePaletteColor</returns>
+    protected static HuePaletteCieColor ParseHuePaletteCieColor(JsonElement data)
+    {
+        return new HuePaletteCieColor
+        {
+            X = data.GetProperty("color").GetProperty("xy").GetProperty("x").GetDouble(), 
+            Y = data.GetProperty("color").GetProperty("xy").GetProperty("y").GetDouble(),
+            Brightness = data.GetProperty("dimming").GetProperty("brightness").GetDouble()
+        };
+    }
+
+    /// <summary>
+    /// Parses a list of HuePaletteColors from a JsonElement directly containing an array of them. 
+    /// </summary>
+    /// <param name="data">The data to parse the list from.</param>
+    /// <returns>A list of HuePaletteColor</returns>
+    protected static List<HuePaletteCieColor> ParseHuePaletteCieColorList(JsonElement data)
+    {
+        var l = new List<HuePaletteCieColor>();
+        foreach (JsonElement color in data.EnumerateArray())
+        {
+            l.Add(ParseHuePaletteCieColor(color));
+        }
+        return l;
+    }
+
+    protected static HuePaletteMiredColor ParseHueColorTemperature(JsonElement data)
+    {
+        return new HuePaletteMiredColor
+        {
+            MiredValue = ParseIntOrDefault(data.GetProperty("color_temperature").GetProperty("mirek")),
+            Brightness = data.GetProperty("dimming").GetProperty("brightness").GetDouble()
+        };
+    }
+
+    /// <summary>
     /// Parses a HueGradient from a JsonElement directly containing the properties "points", and "mode" 
     /// </summary>
     /// <param name="data">The JsonData to parse the gradient from.</param>
@@ -64,21 +103,6 @@ public abstract class HueSimpleJsonConverter : ISimpleJsonConverter
             Points = colors,
             GradientMode = data.GetProperty("mode").GetString()!,
         };
-    }
-
-    /// <summary>
-    /// Parses a list of HueGradients from a JsonElement that directly contains an array of HueGradients. 
-    /// </summary>
-    /// <param name="data">The JsonElement to parse the list from.</param>
-    /// <returns>A list of HueGradients</returns>
-    protected static List<HueGradient> ParseHueGradientList(JsonElement data)
-    {
-        var gradients = new List<HueGradient>();
-        foreach (JsonElement gradient in data.EnumerateArray())
-        {
-            gradients.Add(ParseHueGradient(gradient));
-        }
-        return gradients;
     }
 
     /// <summary>
