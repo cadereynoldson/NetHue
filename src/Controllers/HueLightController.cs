@@ -14,7 +14,7 @@ public class HueLightController : HueController
 
     /// <inheritdoc/>
     public HueLightController(HueRepository respository) : base(respository) { }
-  
+
     /// <summary>
     /// Gets a list of all lights associated with a HueBridge. 
     /// </summary>
@@ -78,6 +78,6 @@ public class HueLightController : HueController
 
         // Response will contain _blank_
         var lightData = rootElement.GetProperty("data").EnumerateArray().First();
-        return light; 
+        return light;
     }
 }

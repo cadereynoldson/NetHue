@@ -90,12 +90,12 @@ public class HueLightTests
         foreach (HueLight light in hueLights)
         {
             await Controller.UpdateLightState(
-                light, 
+                light,
                 new HueLightStateBuilder().Color(RgbColor.Random(), light.CieColorGamut)
             );
         }
     }
-    
+
     /// <summary>
     /// Test for turning all lights where their name contains the value in LIGHT_NAME_CONTAINS to a random color. 
     /// </summary>
@@ -111,7 +111,7 @@ public class HueLightTests
         foreach (HueLight light in hueLights)
         {
             await Controller.UpdateLightState(
-                light, 
+                light,
                 new HueLightStateBuilder().Color(RgbColor.Green, light.CieColorGamut)
             );
         }
@@ -134,7 +134,7 @@ public class HueLightTests
         foreach (HueLight light in hueLights)
         {
             await Controller.UpdateLightState(
-                light, 
+                light,
                 new HueLightStateBuilder().Color(color, light.CieColorGamut)
             );
         }
@@ -183,7 +183,7 @@ public class HueLightTests
         {
             await Controller.UpdateLightState(
                 light,
-                new HueLightStateBuilder().Color(new MiredColor {MiredValue = 153})
+                new HueLightStateBuilder().Color(new MiredColor { MiredValue = 153 })
             );
         }
     }
@@ -199,7 +199,7 @@ public class HueLightTests
         {
             await Controller.UpdateLightState(
                 light,
-                new HueLightStateBuilder().Color(new MiredColor {MiredValue = 500})
+                new HueLightStateBuilder().Color(new MiredColor { MiredValue = 500 })
             );
         }
     }
@@ -210,12 +210,12 @@ public class HueLightTests
         List<HueLight> hueLights = await Controller.GetLights();
         hueLights = hueLights.Where(l => l.State.Powerup != null).ToList();
         hueLights = hueLights.Where(l => l.State.Powerup!.Preset != HueLightPowerup.PowerupPreset.SAFETY).ToList();
-    
+
         foreach (HueLight light in hueLights)
         {
             await Controller.UpdateLightState(
                 light,
-                new HueLightStateBuilder().Color(new MiredColor {MiredValue = 500})
+                new HueLightStateBuilder().Color(new MiredColor { MiredValue = 500 })
             );
         }
     }
@@ -233,11 +233,11 @@ public class HueLightTests
             foreach (HueLight light in hueLights)
             {
                 await Controller.UpdateLightState(
-                    light, 
+                    light,
                     new HueLightStateBuilder().Color(RgbColor.Random(), light.CieColorGamut)
                 );
             }
-            Thread.Sleep(1000); 
+            Thread.Sleep(1000);
         }
     }
 }

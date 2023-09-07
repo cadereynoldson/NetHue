@@ -43,10 +43,11 @@ public class HueBridgeConfiguration
     public static HueBridgeConfiguration FromFile(string configPath)
     {
         string content = File.ReadAllText(configPath);
-        try 
+        try
         {
             return JsonConvert.DeserializeObject<HueBridgeConfiguration>(content)!;
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             throw new HueBridgeConfigurationException(e.Message);
         }

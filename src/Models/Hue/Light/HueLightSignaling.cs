@@ -5,7 +5,7 @@ namespace NetHue;
 /// </summary>
 public record HueLightSignaling
 {
-    
+
     /// <summary>
     /// Indicates which signal is currently active.
     /// </summary>
@@ -24,6 +24,6 @@ public record HueLightSignaling
     /// <summary>
     /// Signals that the HueLight supports.
     /// </summary>
-    public List<string> SignalValues { get; init; } = default!; 
+    public List<string> SignalValues { get; init; } = default!;
 
 }

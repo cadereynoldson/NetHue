@@ -23,6 +23,6 @@ public record HueLightEffect
     /// <summary>
     /// Possible status values that this HueLight can be in when playing an effect. 
     /// </summary>
-    public List<string> StatusValues { get; set;} = default!;
+    public List<string> StatusValues { get; set; } = default!;
 
 }

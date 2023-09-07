@@ -1,5 +1,6 @@
 namespace NetHue;
 
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using JsonConversion;
 
@@ -26,7 +27,7 @@ public abstract class HueSimpleJsonConverter : ISimpleJsonConverter
     }
 
     /// <summary>
-    /// Parses the archetype of a HueResource given a JsonElement containing the property "metadata" 
+    /// Parses the archetype of a HueResource given a JsonElement containing the property "metadata" and subproperty "archetype"
     /// </summary>
     /// <param name="data">The data to parse the archetype from.</param>
     /// <returns>The archetype of a HueResource.</returns>
@@ -43,6 +44,55 @@ public abstract class HueSimpleJsonConverter : ISimpleJsonConverter
     protected static CieColor ParseCieColor(JsonElement data)
     {
         return new CieColor { X = data.GetProperty("x").GetDouble(), Y = data.GetProperty("y").GetDouble() };
+    }
+
+    /// <summary>
+    /// Parses a HueGradient from a JsonElement directly containing the properties "points", and "mode" 
+    /// </summary>
+    /// <param name="data">The JsonData to parse the gradient from.</param>
+    /// <returns>A HueGradient</returns>
+    protected static HueGradient ParseHueGradient(JsonElement data)
+    {
+        var colors = new List<CieColor>();
+        foreach (var element in data.GetProperty("points").EnumerateArray())
+        {
+            colors.Add(ParseCieColor(element.GetProperty("color").GetProperty("xy")));
+        }
+
+        return new HueGradient
+        {
+            Points = colors,
+            GradientMode = data.GetProperty("mode").GetString()!,
+        };
+    }
+
+    /// <summary>
+    /// Parses a list of HueGradients from a JsonElement that directly contains an array of HueGradients. 
+    /// </summary>
+    /// <param name="data">The JsonElement to parse the list from.</param>
+    /// <returns>A list of HueGradients</returns>
+    protected static List<HueGradient> ParseHueGradientList(JsonElement data)
+    {
+        var gradients = new List<HueGradient>();
+        foreach (JsonElement gradient in data.EnumerateArray())
+        {
+            gradients.Add(ParseHueGradient(gradient));
+        }
+        return gradients;
+    }
+
+    /// <summary>
+    /// Parses a HueResourceIdentifier from a JsonElement directly containing the properties "rid" and "rtype"
+    /// </summary>
+    /// <param name="data">The JsonElement to parse the resource identifier from.</param>
+    /// <returns>A HueResourceIdentifier</returns>
+    protected static HueResourceIdentifier ParseResourceIdentifier(JsonElement data)
+    {
+        return new HueResourceIdentifier
+        {
+            Id = data.GetProperty("rid").GetString()!,
+            ResourceType = data.GetProperty("rtype").GetString()!
+        };
     }
 
     /// <summary>
@@ -99,11 +149,7 @@ public abstract class HueSimpleJsonConverter : ISimpleJsonConverter
         var l = new List<HueResourceIdentifier>();
         foreach (JsonElement resource in data.EnumerateArray())
         {
-            l.Add(new HueResourceIdentifier
-            {
-                Id = resource.GetProperty("rid").GetString()!,
-                ResourceType = resource.GetProperty("rtype").GetString()!
-            });
+            l.Add(ParseResourceIdentifier(resource));
         }
         return l;
     }
@@ -124,6 +170,34 @@ public abstract class HueSimpleJsonConverter : ISimpleJsonConverter
         {
             return onFail;
         }
+    }
+
+    /// <summary>
+    /// Attempts to parse a boolean value from a JsonElement directly containing a Bool. 
+    /// </summary>
+    /// <param name="data">The JsonElement containing a boolean. </param>
+    /// <returns>Value of boolean, null if bool cannot be parsed.</returns>
+    protected static bool? ParseBool(JsonElement data)
+    {
+        try
+        {
+            return data.GetBoolean();
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Returns true/false based on if a json element contains a property. 
+    /// </summary>
+    /// <param name="data">The data to check for containing a property.</param>
+    /// <param name="propertyName">The name of the property to look for.</param>
+    /// <returns>True/False contains property. </returns>
+    protected static bool HasProperty(JsonElement data, string propertyName)
+    {
+        return data.TryGetProperty(propertyName, out _);
     }
 
     public abstract object Convert(JsonElement data);

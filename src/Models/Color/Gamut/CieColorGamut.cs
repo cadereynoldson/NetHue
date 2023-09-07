@@ -1,4 +1,4 @@
-namespace NetHue; 
+namespace NetHue;
 
 /// <summary>
 /// Class representing the color gamut of a CIE color space. 
@@ -6,7 +6,8 @@ namespace NetHue;
 /// All colors inside said triangle will be recreateable by a device. 
 /// For more information, see https://en.wikipedia.org/wiki/CIE_1931_color_space
 /// </summary>
-public class CieColorGamut {
+public class CieColorGamut
+{
 
     /// <summary>
     /// The red value of this color gamut.

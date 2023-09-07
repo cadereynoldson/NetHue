@@ -3,12 +3,13 @@ namespace NetHue;
 /// <summary>
 /// An exception thrown when an error occuirs with a HTTP call with a HueBridge. 
 /// </summary>
-public class HueHttpException : Exception {
+public class HueHttpException : Exception
+{
 
     /// <summary>
     /// The full response from the HueBridge. 
     /// </summary>
-    public string Response { get; init; } 
+    public string Response { get; init; }
 
     /// <summary>
     /// Exception thrown when an error occurs with a HTTP call with a HueBridge. 
@@ -18,7 +19,7 @@ public class HueHttpException : Exception {
     public HueHttpException(
         string message,
         string response = ""
-    ) : base(message) 
+    ) : base(message)
     {
         Response = response;
     }

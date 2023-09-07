@@ -35,12 +35,13 @@ using JsonConversion;
 /// - powerup 
 /// </summary>
 [SimpleJsonConverter(typeof(HueLightSimpleJsonConverter))]
-public record HueLight : HueResource {
+public record HueLight : HueResource
+{
 
     /// <summary>
     /// The state of the HueLight, contains values such as on, the current CIE color, etc. 
     /// </summary>
-    public HueLightState State { get; set; } = default!; 
+    public HueLightState State { get; set; } = default!;
 
     /// <summary>
     /// The range of mired colors this HueLight can produce.
@@ -50,7 +51,7 @@ public record HueLight : HueResource {
     /// <summary>
     /// The color gamut of CIE colors this HueLight can produce. 
     /// </summary>
-    public CieColorGamut CieColorGamut { get; init; } = default!; 
+    public CieColorGamut CieColorGamut { get; init; } = default!;
 
     /// <summary>
     /// Alert effects that the HueLight supports.

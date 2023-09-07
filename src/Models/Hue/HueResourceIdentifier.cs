@@ -1,4 +1,4 @@
-namespace NetHue; 
+namespace NetHue;
 
 /// <summary>
 /// Record storing basic information on a HueResource. Mainly used to reference resources from different resource types.

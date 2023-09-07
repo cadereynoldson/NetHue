@@ -10,5 +10,5 @@ public class HueBridgeConfigurationException : Exception
     /// Creates an exception thrown when an invalid configuration was created for a HueBridge.
     /// </summary>
     /// <param name="message"></param>
-    public HueBridgeConfigurationException(string message) : base(message) {}
+    public HueBridgeConfigurationException(string message) : base(message) { }
 }

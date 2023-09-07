@@ -22,7 +22,7 @@ public class HueRoomController : HueController
     public async Task<List<HueRoom>> GetRooms()
     {
         var response = await Repository.Get("/resource/room");
-        
+
         // Fetch information from object. 
         using JsonDocument document = JsonDocument.Parse(response);
         var rootElement = document.RootElement;

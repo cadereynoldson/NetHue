@@ -56,7 +56,7 @@ public class HueHttpHelper
             var responseContent = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
-                return responseContent; 
+                return responseContent;
             }
             else
             {
@@ -106,7 +106,7 @@ public class HueHttpHelper
     /// <returns>A string containing zero or more errors.</returns>
     public static string ParseErrors(JsonElement json)
     {
-        var str = ""; 
+        var str = "";
         var errorCount = 0;
 
         foreach (JsonElement errorData in json.GetProperty("errors").EnumerateArray())
@@ -115,6 +115,6 @@ public class HueHttpHelper
             str += $"<{++errorCount}>: {errorMessage}";
         }
 
-        return str; 
+        return str;
     }
 }

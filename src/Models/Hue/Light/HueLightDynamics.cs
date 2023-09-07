@@ -1,9 +1,10 @@
-namespace NetHue; 
+namespace NetHue;
 
 /// <summary>
 /// Record containing information on the dynamic state of a HueLight. 
 /// </summary>
-public record HueLightDynamics {
+public record HueLightDynamics
+{
 
     /// <summary>
     /// Current status of the lamp with dynamics

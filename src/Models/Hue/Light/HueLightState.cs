@@ -3,7 +3,7 @@ namespace NetHue;
 /// <summary>
 /// Record containing information the state of a HueLight. 
 /// </summary>
-public record HueLightState 
+public record HueLightState
 {
     /// <summary>
     /// Indicates if this <see cref="HueLight"/> is on. 
@@ -28,7 +28,7 @@ public record HueLightState
     /// <summary>
     /// The CIE color of this <see cref="HueLight"/>. 
     /// </summary>
-    public CieColor Color { get; set; } = default!; 
+    public CieColor Color { get; set; } = default!;
 
     /// <summary>
     /// The mired color temperature of this <see cref="HueLight"/>.
@@ -48,12 +48,12 @@ public record HueLightState
     /// <summary>
     /// The state of a HueLight gradient. Will be non-null if device allows for, or has been configured for this.
     /// </summary>
-    public HueLightGradient? Gradient { get; set; } 
+    public HueLightGradient? Gradient { get; set; }
 
     /// <summary>
     /// The state of a HueLight effect. Will be non-null if currently being used. 
     /// </summary>
-    public HueLightEffect? Effect {get; set; }
+    public HueLightEffect? Effect { get; set; }
 
     /// <summary>
     /// The state of a timed HueLight effect. Will be non-null if currently being used. 

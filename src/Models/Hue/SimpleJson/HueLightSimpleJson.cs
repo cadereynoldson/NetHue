@@ -37,7 +37,7 @@ public class HueLightSimpleJsonConverter : HueSimpleJsonConverter
                 Gradient = ParseHueLightGradient(data),
                 Effect = ParseHueLightEffect(data),
                 TimedEffect = ParseHueLightTimedEffect(data),
-                Powerup = ParsePowerup(data) 
+                Powerup = ParsePowerup(data)
             },
             MiredColorRange = new MiredColorRange
             {
@@ -94,19 +94,9 @@ public class HueLightSimpleJsonConverter : HueSimpleJsonConverter
     {
         if (data.TryGetProperty("gradient", out JsonElement gradient))
         {
-            var colors = new List<CieColor>();
-            foreach (var element in gradient.GetProperty("points").EnumerateArray())
-            {
-                colors.Add(ParseCieColor(element.GetProperty("color").GetProperty("xy")));
-            }
-
             return new HueLightGradient
             {
-                Gradient = new HueGradient
-                {
-                    Points = colors,
-                    GradientMode = gradient.GetProperty("mode").GetString()!,
-                },
+                Gradient = ParseHueGradient(gradient),
                 GradientPointsCapable = ParseIntOrDefault(gradient.GetProperty("points_capable")),
                 GradientModeValues = ParseStringList(gradient.GetProperty("mode_values")),
                 GradientPixelCount = ParseIntOrDefault(gradient.GetProperty("pixel_count"))
@@ -133,7 +123,7 @@ public class HueLightSimpleJsonConverter : HueSimpleJsonConverter
 
     private static HueLightPowerup? ParsePowerup(JsonElement data)
     {
-        
+
         if (data.TryGetProperty("powerup", out JsonElement powerup))
         {
             // Dimming may or may not exist: 
@@ -142,7 +132,7 @@ public class HueLightSimpleJsonConverter : HueSimpleJsonConverter
             CieColor? cieColor = null;
             MiredColor? miredColor = null;
             HueLightPowerup.ColorMode? colorMode = null;
-            
+
             if (powerup.TryGetProperty("dimming", out JsonElement dimmingElement))
             {
                 if (dimmingElement.TryGetProperty("dimming", out JsonElement dimmingVals))

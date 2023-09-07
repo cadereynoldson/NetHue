@@ -21,5 +21,9 @@ public record HueScene : HueResource
     /// Indicates where to automatically start the dynamically on active recall.
     /// </summary>
     public bool AutoDynamic { get; set; } = default!;
+
+    /// <summary>
+    /// Indicates the status of this scene. 
+    /// </summary>
     public string Status { get; set; } = default!;
 }

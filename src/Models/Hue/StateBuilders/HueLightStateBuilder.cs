@@ -40,10 +40,10 @@ public class HueLightStateBuilder
     public HueLightStateBuilder Color(CieColor color)
     {
         AddOrUpdateProperty(
-            "color", 
+            "color",
             new JObject(
                 new JProperty(
-                    "xy", 
+                    "xy",
                     new JObject(
                         new JProperty("x", color.X),
                         new JProperty("y", color.Y)
@@ -73,7 +73,7 @@ public class HueLightStateBuilder
     public HueLightStateBuilder Color(MiredColor color)
     {
         AddOrUpdateProperty("color_temperature", new JObject(new JProperty("mirek", color.MiredValue)));
-        return this; 
+        return this;
     }
 
     public HueLightStateBuilder Brightness(double brightness)

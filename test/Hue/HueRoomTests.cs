@@ -1,4 +1,4 @@
-namespace HueTests; 
+namespace HueTests;
 
 public class HueRoomTests
 {

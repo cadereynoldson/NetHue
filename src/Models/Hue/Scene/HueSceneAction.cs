@@ -44,5 +44,5 @@ public record HueSceneAction
     /// The duration of a light transition. 
     /// </summary>
     public int? DynamicDuration { get; set; }
-    
+
 }

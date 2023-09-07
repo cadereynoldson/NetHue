@@ -69,7 +69,7 @@ public record HueLightPowerup
         /// <summary>
         /// Behavior indicating light will take previous state it had before being turned off. 
         /// </summary>
-        LAST_ON_STATE, 
+        LAST_ON_STATE,
 
         /// <summary>
         /// Custom preset, allows for custom config of power on behavior. 

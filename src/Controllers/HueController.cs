@@ -1,16 +1,16 @@
-namespace NetHue; 
+namespace NetHue;
 
 /// <summary>
 /// Class which handles getting various types on information from a HueBridge.
 /// Handles parsing, specific calls to endpoints, etc. 
 /// </summary>
-public abstract class HueController 
+public abstract class HueController
 {
 
     /// <summary>
     /// The HueRepository to use to get data from the HueBridge.
     /// </summary>
-    protected readonly HueRepository Repository; 
+    protected readonly HueRepository Repository;
 
     /// <summary>
     /// Creates a new instance of a HueController. 

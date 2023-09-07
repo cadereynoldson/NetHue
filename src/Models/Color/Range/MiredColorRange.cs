@@ -1,7 +1,8 @@
 /// <summary>
 /// Represents a range of mired colors. 
 /// </summary>
-public class MiredColorRange {
+public class MiredColorRange
+{
 
     /// <summary>
     /// The minimum mired value of this range. 
