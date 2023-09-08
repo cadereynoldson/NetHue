@@ -15,7 +15,7 @@ public class HueLightStateBuilder
     /// <summary>
     /// Turns the HueLight this is applied to on.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>this HueStateBuilder</returns>
     public HueLightStateBuilder On()
     {
         AddOrUpdateProperty("on", new JObject(new JProperty("on", true)));
@@ -36,7 +36,7 @@ public class HueLightStateBuilder
     /// Changes the color of a light to a specific CIE color. 
     /// </summary>
     /// <param name="color">The color to change the light to.</param>
-    /// <returns></returns>
+    /// <returns>this HueStateBuilder</returns>
     public HueLightStateBuilder Color(CieColor color)
     {
         AddOrUpdateProperty(
@@ -59,7 +59,7 @@ public class HueLightStateBuilder
     /// </summary>
     /// <param name="color">The RGB color to change the light to.</param>
     /// <param name="cieColorGamut">The CIE color gamut to convert this color to.</param>
-    /// <returns></returns>
+    /// <returns>this HueStateBuilder</returns>
     public HueLightStateBuilder Color(RgbColor color, CieColorGamut cieColorGamut)
     {
         return Color(color.ToCie(cieColorGamut));
@@ -68,8 +68,8 @@ public class HueLightStateBuilder
     /// <summary>
     /// Changes the color of a light to a MiredColor. 
     /// </summary>
-    /// <param name="color"></param>
-    /// <returns></returns>
+    /// <param name="color">The color to change the light to.</param>
+    /// <returns>this HueStateBuilder</returns>
     public HueLightStateBuilder Color(MiredColor color)
     {
         AddOrUpdateProperty("color_temperature", new JObject(new JProperty("mirek", color.MiredValue)));

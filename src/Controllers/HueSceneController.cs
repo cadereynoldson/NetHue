@@ -10,7 +10,7 @@ public class HueSceneController : HueController
     public HueSceneController(string configPath) : base(configPath) { }
 
     /// <inheritdoc/>
-    public HueSceneController(HueBridgeConfiguration config) : base(config) { }
+    public HueSceneController(HueConfiguration config) : base(config) { }
 
     /// <inheritdoc/>
     public HueSceneController(HueRepository respository) : base(respository) { }

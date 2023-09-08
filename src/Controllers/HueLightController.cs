@@ -10,7 +10,7 @@ public class HueLightController : HueController
     public HueLightController(string configPath) : base(configPath) { }
 
     /// <inheritdoc/>
-    public HueLightController(HueBridgeConfiguration config) : base(config) { }
+    public HueLightController(HueConfiguration config) : base(config) { }
 
     /// <inheritdoc/>
     public HueLightController(HueRepository respository) : base(respository) { }

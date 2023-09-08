@@ -6,7 +6,7 @@ namespace NetHue;
 /// Class containing the information for accessing a HueBridge via the Clip API V2.
 /// Contains fields Ip, and AppKey. See <see href= "https://developers.meethue.com/develop/hue-api-v2/getting-started/"> Getting started with the Hue API V2 </see>
 /// </summary>
-public class HueBridgeConfiguration
+public class HueConfiguration
 {
     /// <summary>
     /// The IP of the HueBridge to connect to. 
@@ -24,7 +24,7 @@ public class HueBridgeConfiguration
     /// </summary>
     /// <param name="ip"></param>
     /// <param name="appKey">The key which grants us access to the Hue Clip API v2. </param>
-    public HueBridgeConfiguration(string ip, string appKey)
+    public HueConfiguration(string ip, string appKey)
     {
         Ip = ip;
         AppKey = appKey;
@@ -40,12 +40,12 @@ public class HueBridgeConfiguration
     /// <param name="configPath">The path to the configuration file.</param>
     /// <returns>A HueBridgeConfiguration created from the configuration file.</returns>
     /// <exception cref="HueBridgeConfigurationException">On invalid configuration file input.</exception>
-    public static HueBridgeConfiguration FromFile(string configPath)
+    public static HueConfiguration FromJson(string configPath)
     {
         string content = File.ReadAllText(configPath);
         try
         {
-            return JsonConvert.DeserializeObject<HueBridgeConfiguration>(content)!;
+            return JsonConvert.DeserializeObject<HueConfiguration>(content)!;
         }
         catch (Exception e)
         {

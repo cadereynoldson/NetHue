@@ -14,7 +14,7 @@ public class HueBridgeConfigTests
     [InlineData("Data/example_config.json")]
     public void CreateSucceeds(string path)
     {
-        var config = HueBridgeConfiguration.FromFile(path);
+        var config = HueConfiguration.FromJson(path);
         Assert.NotNull(config);
         Assert.Equal("0.0.0.0", config.Ip);
         Assert.Equal("appKey", config.AppKey);

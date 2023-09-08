@@ -18,19 +18,19 @@ public class HueRepository
     /// <summary>
     /// HueBridge configuration storing information on the HueBridge. 
     /// </summary>
-    private readonly HueBridgeConfiguration Configuration;
+    private readonly HueConfiguration Configuration;
 
     /// <summary>
     /// Creates a new insance of a HueRepository. 
     /// </summary>
     /// <param name="configPath">The path to the HueBridgeConfiguration compatible JSON file.</param>
-    public HueRepository(string configPath) : this(HueBridgeConfiguration.FromFile(configPath)) { }
+    public HueRepository(string configPath) : this(HueConfiguration.FromJson(configPath)) { }
 
     /// <summary>
     /// Creates a new instance of a HueRepository. 
     /// </summary>
     /// <param name="config">The configuration data of a HueBridge.</param>
-    public HueRepository(HueBridgeConfiguration config)
+    public HueRepository(HueConfiguration config)
     {
         BaseEndpoint = $"https://{config.Ip}/clip/v2";
         Configuration = config;
