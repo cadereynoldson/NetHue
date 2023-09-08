@@ -1,5 +1,8 @@
+using JsonConversion;
+
 namespace NetHue;
 
+[SimpleJsonConverter(typeof(HueSceneSimpleJsonConverter))]
 public record HueScene : HueResource
 {
     /// <summary>

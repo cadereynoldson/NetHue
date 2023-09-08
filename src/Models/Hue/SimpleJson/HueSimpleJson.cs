@@ -55,7 +55,7 @@ public abstract class HueSimpleJsonConverter : ISimpleJsonConverter
     {
         return new HuePaletteCieColor
         {
-            X = data.GetProperty("color").GetProperty("xy").GetProperty("x").GetDouble(), 
+            X = data.GetProperty("color").GetProperty("xy").GetProperty("x").GetDouble(),
             Y = data.GetProperty("color").GetProperty("xy").GetProperty("y").GetDouble(),
             Brightness = data.GetProperty("dimming").GetProperty("brightness").GetDouble()
         };
@@ -83,6 +83,16 @@ public abstract class HueSimpleJsonConverter : ISimpleJsonConverter
             MiredValue = ParseIntOrDefault(data.GetProperty("color_temperature").GetProperty("mirek")),
             Brightness = data.GetProperty("dimming").GetProperty("brightness").GetDouble()
         };
+    }
+
+    protected static List<HuePaletteMiredColor> ParseHueColorTemperatureList(JsonElement data)
+    {
+        var l = new List<HuePaletteMiredColor>();
+        foreach (JsonElement color in data.EnumerateArray())
+        {
+            l.Add(ParseHueColorTemperature(color));
+        }
+        return l;
     }
 
     /// <summary>
