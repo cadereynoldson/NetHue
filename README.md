@@ -21,3 +21,20 @@ Package was designed to be as easy to get started with as possible.
     }
     ``` 
 3. And thats it! Use this created file to create a `HueConfiguration` object by manually parsing the IP and Application Key, or just use `HueConfiguration.FromJson("config.json")`. All of the controllers for this package take a `HueConfiguration` object as a constructor parameter, or you can provide the path to this file and they'll handle the parsing themselves. 
+
+## Basic Examples
+- Example of getting all the lights connected to your Hue bridge:
+    ```csharp
+    var controller = new HueLightController("config.json");
+    var lights = await controller.GetLights();
+    ```
+
+- Example getting all the lights of a room configured on your Hue bridge.]
+    ```csharp
+    var config = new HueConfiguration("config.json");
+    var lightController = new HueLightController(config);
+    var roomController = new HueRoomController(config);
+
+    var room = await roomController.GetRooms().First();
+    var lights = await lightController.GetLights(room);
+    ```
