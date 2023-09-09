@@ -1,5 +1,7 @@
 namespace NetHue;
 
+using System.Dynamic;
+using System.Net.Http.Headers;
 using System.Text.Json;
 using JsonConversion;
 
@@ -40,6 +42,26 @@ public class HueLightController : HueController
             }
         }
         return lights;
+    }
+
+    /// <summary>
+    /// Fetches the lights of the parameterized HueRoom. 
+    /// </summary>
+    /// <param name="room">The room to get the lights of.</param>
+    /// <returns>A list of HueLights</returns>
+    public async Task<List<HueLight>> GetLights(HueRoom room)
+    {
+        var lights = await GetLights();
+
+        var roomChildren = new HashSet<string>();
+        foreach (var child in room.Children)
+        {
+            roomChildren.Add(child.Id);
+        }
+
+        lights = lights.Where(l => roomChildren.Contains(l.Owner.Id)).ToList();
+
+        return lights; 
     }
 
     /// <summary>

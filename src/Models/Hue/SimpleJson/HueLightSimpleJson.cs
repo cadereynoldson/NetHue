@@ -18,6 +18,7 @@ public class HueLightSimpleJsonConverter : HueSimpleJsonConverter
         {
             Id = ParseId(data),
             Name = ParseName(data),
+            Owner = ParseResourceIdentifier(data.GetProperty("owner")),
             Archetype = ParseArchetype(data),
             State = new HueLightState
             {

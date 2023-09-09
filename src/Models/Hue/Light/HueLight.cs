@@ -44,6 +44,11 @@ public record HueLight : HueResource
     public HueLightState State { get; set; } = default!;
 
     /// <summary>
+    /// The owner of the HueLight. 
+    /// </summary>
+    public HueResourceIdentifier Owner { get; set; } = default!;
+
+    /// <summary>
     /// The range of mired colors this HueLight can produce.
     /// </summary>
     public MiredColorRange MiredColorRange { get; init; } = default!;

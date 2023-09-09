@@ -52,6 +52,21 @@ public class HueLightTests
     }
 
     /// <summary>
+    /// Tests getting the lights of a HueRoom succeeds. 
+    /// </summary>
+    /// <returns></returns>
+    [Fact]
+    public async Task GetHueLightsOfRoom()
+    {
+        var roomController = new HueRoomController("Data/config.json");
+        var rooms = await roomController.GetRooms();
+        var room = rooms.Where(r => r.Name.Contains("Cade")).First();
+
+        var lights = await Controller.GetLights(room);
+        Assert.NotEmpty(lights);
+    }
+
+    /// <summary>
     /// Test for turning on all lights where their name contains "lamp" 
     /// </summary>
     /// <returns></returns>
