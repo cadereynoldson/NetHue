@@ -1,11 +1,8 @@
 namespace NetHue;
 
-using JsonConversion;
-
 /// <summary>
 /// Class containing shared information between all types of Hue products. 
 /// </summary>
-[SimpleJsonConverter(typeof(HueRoomSimpleJsonConverter))]
 public abstract record HueResource
 {
 

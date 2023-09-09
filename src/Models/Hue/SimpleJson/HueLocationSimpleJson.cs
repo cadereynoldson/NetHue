@@ -2,7 +2,7 @@ using System.Text.Json;
 
 namespace NetHue;
 
-class HueRoomSimpleJsonConverter : HueSimpleJsonConverter
+class HueLocationSimpleJson : HueSimpleJsonConverter
 {
     public override object Convert(JsonElement data)
     {

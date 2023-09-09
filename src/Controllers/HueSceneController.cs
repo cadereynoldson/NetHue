@@ -3,6 +3,9 @@ using JsonConversion;
 
 namespace NetHue;
 
+/// <summary>
+/// Class containing methods for interacting with a Hue scenes configured on a Hue bridge.
+/// </summary>
 public class HueSceneController : HueController
 {
     /// <inheritdoc/>
@@ -13,6 +16,22 @@ public class HueSceneController : HueController
 
     /// <inheritdoc/>
     public HueSceneController(HueRepository respository) : base(respository) { }
+
+    /// <summary>
+    /// Gets a HueScene given its ID. 
+    /// </summary>
+    /// <param name="id">The ID of the scene to fetch.</param>
+    /// <returns>The HueScene with the given id</returns>
+    public async Task<HueScene> GetScene(string id)
+    {
+        var response = await Repository.Get($"resource/scene/{id}");
+        using JsonDocument document = JsonDocument.Parse(response);
+        var rootElement = document.RootElement;
+
+        // Response will only contain one Scene. 
+        var sceneData = rootElement.GetProperty("data").EnumerateArray().First();
+        return SimpleJson.Convert<HueScene>(sceneData)!;
+    }
 
     /// <summary>
     /// Gets a list of all the HueScenes associated with the hue bridge. 
@@ -36,22 +55,6 @@ public class HueSceneController : HueController
             }
         }
         return scenes;
-    }
-
-    /// <summary>
-    /// Gets a HueScene given its ID. 
-    /// </summary>
-    /// <param name="id">The ID of the scene to fetch.</param>
-    /// <returns>The HueScene with the given id</returns>
-    public async Task<HueScene> GetScene(string id)
-    {
-        var response = await Repository.Get($"resource/scene/{id}");
-        using JsonDocument document = JsonDocument.Parse(response);
-        var rootElement = document.RootElement;
-
-        // Response will only contain one Scene. 
-        var sceneData = rootElement.GetProperty("data").EnumerateArray().First();
-        return SimpleJson.Convert<HueScene>(sceneData)!;
     }
 
     /// <summary>
@@ -84,10 +87,10 @@ public class HueSceneController : HueController
     public async Task<HueScene> SetScene(HueScene scene)
     {
         string body = "{\"recall\": {\"action\": \"active\"}}";
-        
+
         // Returned value is just the scenes id. HueRepository will throw any errors if there were some. 
         await Repository.Put($"resource/scene/{scene.Id}", body);
-        
+
         // Get updated information on scene. Put requests don't return what type of scene was applied. 
         var updatedScene = await GetScene(scene.Id);
         scene.Status = updatedScene.Status;

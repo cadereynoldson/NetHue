@@ -1,3 +1,5 @@
+namespace NetHue;
+
 /// <summary>
 /// Represents a range of mired colors. 
 /// </summary>

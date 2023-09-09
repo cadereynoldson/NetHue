@@ -3,7 +3,9 @@ using JsonConversion;
 
 namespace NetHue;
 
-
+/// <summary>
+/// Class containing methods for interacting with rooms configured on a Hue bridge.
+/// </summary>
 public class HueRoomController : HueController
 {
     /// <inheritdoc/>

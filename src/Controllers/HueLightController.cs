@@ -1,10 +1,11 @@
 namespace NetHue;
 
-using System.Dynamic;
-using System.Net.Http.Headers;
 using System.Text.Json;
 using JsonConversion;
 
+/// <summary>
+/// Class containing methods for interating with hue lights connected to a hue bridge. 
+/// </summary>
 public class HueLightController : HueController
 {
 
@@ -61,7 +62,7 @@ public class HueLightController : HueController
 
         lights = lights.Where(l => roomChildren.Contains(l.Owner.Id)).ToList();
 
-        return lights; 
+        return lights;
     }
 
     /// <summary>
