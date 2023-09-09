@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using JsonConversion;
 
@@ -40,6 +39,22 @@ public class HueSceneController : HueController
     }
 
     /// <summary>
+    /// Gets a HueScene given its ID. 
+    /// </summary>
+    /// <param name="id">The ID of the scene to fetch.</param>
+    /// <returns>The HueScene with the given id</returns>
+    public async Task<HueScene> GetScene(string id)
+    {
+        var response = await Repository.Get($"resource/scene/{id}");
+        using JsonDocument document = JsonDocument.Parse(response);
+        var rootElement = document.RootElement;
+
+        // Response will only contain one Scene. 
+        var sceneData = rootElement.GetProperty("data").EnumerateArray().First();
+        return SimpleJson.Convert<HueScene>(sceneData)!;
+    }
+
+    /// <summary>
     /// Gets a list of HueScenes for the given HueRoom
     /// </summary>
     /// <param name="room">The room to get the scenes of.</param>
@@ -62,14 +77,20 @@ public class HueSceneController : HueController
     }
 
     /// <summary>
-    /// Turns "on" the parameterized HueScene. 
+    /// Turns "on" the parameterized HueScene. Updates the parameterized HueScene in place.
     /// </summary>
-    /// <param name="scene"></param>
-    /// <returns></returns>
+    /// <param name="scene">The scene to set.</param>
+    /// <returns>The passed in HueScene</returns>
     public async Task<HueScene> SetScene(HueScene scene)
     {
         string body = "{\"recall\": {\"action\": \"active\"}}";
-        string response = await Repository.Put($"resource/scene/{scene.Id}", body);
+        
+        // Returned value is just the scenes id. HueRepository will throw any errors if there were some. 
+        await Repository.Put($"resource/scene/{scene.Id}", body);
+        
+        // Get updated information on scene. Put requests don't return what type of scene was applied. 
+        var updatedScene = await GetScene(scene.Id);
+        scene.Status = updatedScene.Status;
         return scene;
     }
 }

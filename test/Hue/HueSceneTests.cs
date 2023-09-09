@@ -38,6 +38,7 @@ public class HueSceneTests
         foreach (var scene in scenes)
         {
             await Controller.SetScene(scene);
+            Assert.Equal("static", scene.Status);
             Thread.Sleep(1000);
         }
     }
