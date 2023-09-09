@@ -29,7 +29,7 @@ Package was designed to be as easy to get started with as possible.
     var lights = await controller.GetLights();
     ```
 
-- Example getting all the lights of a room configured on your Hue bridge.]
+- Example getting all the lights of a room configured on your Hue bridge:
     ```csharp
     var config = new HueConfiguration("config.json");
     var lightController = new HueLightController(config);
@@ -37,4 +37,13 @@ Package was designed to be as easy to get started with as possible.
 
     var room = await roomController.GetRooms().First();
     var lights = await lightController.GetLights(room);
+    ```
+
+- Example setting a scene: 
+    ```csharp
+    var controller = new HueSceneController("config.json");
+    var scene = controller.GetScenes();
+
+    // SetScene mutates passed in scene object, no need to catch it.
+    await controller.SetScene(scene);
     ```
