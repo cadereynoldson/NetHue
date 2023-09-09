@@ -63,6 +63,26 @@ public class HueSceneTests
         }
     }
 
+    /// <summary>
+    /// Test rotating the scenes of a given room is successful. 
+    /// </summary>
+    [Fact]
+    public async Task RotateScenesWithDimmingAndDuration()
+    {
+        var roomController = new HueRoomController("Data/config.json");
+        var rooms = await roomController.GetRooms();
+        var room = rooms.Where(r => r.Name.Contains("Cade")).First();
+
+        List<HueScene> scenes = await Controller.GetScenes(room);
+        foreach (var scene in scenes)
+        {
+            await Controller.SetScene(scene, 50, 500);
+            Assert.Equal("static", scene.Status);
+            Thread.Sleep(100);
+        }
+    }
+
+
     [Fact]
     public async Task GetActiveScenes()
     {
@@ -79,5 +99,23 @@ public class HueSceneTests
 
         var scene = await Controller.GetActiveScene(room);
         Assert.NotNull(scene);
+    }
+
+    [Fact]
+    public async Task SetSceneBrightness()
+    {
+        var roomController = new HueRoomController("Data/config.json");
+        var rooms = await roomController.GetRooms();
+        var room = rooms.Where(r => r.Name.Contains("Cade")).First();
+
+        List<HueScene> scenes = await Controller.GetScenes(room);
+        var scene = scenes.Last();
+        await Controller.SetScene(scene);
+
+        for (int i = 0; i <= 100; i += 10)
+        {
+            await Controller.SetScene(scene, i);
+            Thread.Sleep(100);
+        }
     }
 }

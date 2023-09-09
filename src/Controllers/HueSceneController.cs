@@ -151,24 +151,10 @@ public class HueSceneController : HueController
     /// <summary>
     /// Updates the brightness of a scene, does not write any values, overrides scene's default brightness. 
     /// </summary>
-    /// <param name="scene">The scene to update the brightness of.</param>
-    /// <param name="brightness"></param>
-    public async void SetSceneBrightness(HueScene scene, double brightness)
+    /// <param name="scene">The scene to update the brightness of</param>
+    /// <param name="brightness">The brightness to apply to the scene</param>
+    public async Task SetSceneBrightness(HueScene scene, double brightness)
     {
-        var bodyDict = new Dictionary<string, object>
-        {
-            ["recall"] = new Dictionary<string, object>
-            {
-                ["dimming"] = new Dictionary<string, object>
-                {
-                    {"brightness", brightness}
-                }
-            }
-        };
-
-        string body = JsonConvert.SerializeObject(bodyDict);
-
-        // Returned value is just the scenes id. HueRepository will throw any errors if there were some. 
-        await Repository.Put($"resource/scene/{scene.Id}", body);
+        await SetScene(scene, brightness);
     }
 }
