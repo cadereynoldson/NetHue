@@ -76,6 +76,11 @@ public class HueLightStateBuilder
         return this;
     }
 
+    /// <summary>
+    /// Changes the brightness of a HueLight. 
+    /// </summary>
+    /// <param name="brightness">The new brightness of the light.</param>
+    /// <returns></returns>
     public HueLightStateBuilder Brightness(double brightness)
     {
         AddOrUpdateProperty("dimming", new JObject(new JProperty("brightness", brightness)));

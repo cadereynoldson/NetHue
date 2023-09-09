@@ -42,8 +42,17 @@ Package was designed to be as easy to get started with as possible.
 - Example setting a scene: 
     ```csharp
     var controller = new HueSceneController("config.json");
-    var scene = controller.GetScenes();
+    var scene = controller.GetScenes().First();
 
     // SetScene mutates passed in scene object, no need to catch it.
     await controller.SetScene(scene);
+    ```
+
+- Example changing the *current* brightness of a scene: 
+    ```csharp
+    var controller = new HueSceneController("config.json");
+    var scene = controller.GetScenes().First();
+
+    // Set scene to 50 percent brightness.
+    await controller.SetSceneBrightness(scene, 50);
     ```

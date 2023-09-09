@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using Xunit.Sdk;
 
 namespace NetHue;
 
@@ -41,5 +42,42 @@ public class HueSceneTests
             Assert.Equal("static", scene.Status);
             Thread.Sleep(1000);
         }
+    }
+
+    /// <summary>
+    /// Test rotating the scenes of a given room is successful. 
+    /// </summary>
+    [Fact]
+    public async Task RotateScenesWithDimming()
+    {
+        var roomController = new HueRoomController("Data/config.json");
+        var rooms = await roomController.GetRooms();
+        var room = rooms.Where(r => r.Name.Contains("Cade")).First();
+
+        List<HueScene> scenes = await Controller.GetScenes(room);
+        foreach (var scene in scenes)
+        {
+            await Controller.SetScene(scene, 50);
+            Assert.Equal("static", scene.Status);
+            Thread.Sleep(1000);
+        }
+    }
+
+    [Fact]
+    public async Task GetActiveScenes()
+    {
+        var scenes = await Controller.GetActiveScenes();
+        Assert.NotEmpty(scenes);
+    }
+
+    [Fact]
+    public async Task GetActiveRoomScenes()
+    {
+        var roomController = new HueRoomController("Data/config.json");
+        var rooms = await roomController.GetRooms();
+        var room = rooms.Where(r => r.Name.Contains("Cade")).First();
+
+        var scene = await Controller.GetActiveScene(room);
+        Assert.NotNull(scene);
     }
 }

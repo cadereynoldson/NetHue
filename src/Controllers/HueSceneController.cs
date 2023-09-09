@@ -1,5 +1,7 @@
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using JsonConversion;
+using Newtonsoft.Json;
 
 namespace NetHue;
 
@@ -58,35 +60,84 @@ public class HueSceneController : HueController
     }
 
     /// <summary>
-    /// Gets a list of HueScenes for the given HueRoom
+    /// Gets a list of HueScenes for the given HueLocation
     /// </summary>
-    /// <param name="room">The room to get the scenes of.</param>
+    /// <param name="location">The location to get the scenes of.</param>
     /// <returns>A list of HueScenes associated with a room.</returns>
-    public async Task<List<HueScene>> GetScenes(HueRoom room)
+    public async Task<List<HueScene>> GetScenes(HueLocation location)
     {
-        return await GetScenes(room.Id);
+        return await GetScenes(location.Id);
     }
 
     /// <summary>
     /// Gets the scenes associated with a given group (Room/Zone)
     /// </summary>
-    /// <param name="groupId">The ID of the group to fetch the scenes of.</param>
+    /// <param name="id">The ID of the location to fetch the scenes of.</param>
     /// <returns>A list of HueScenes</returns>
-    public async Task<List<HueScene>> GetScenes(string groupId)
+    public async Task<List<HueScene>> GetScenes(string id)
     {
         List<HueScene> scenes = await GetScenes();
-        scenes = scenes.Where(s => s.Group.Id == groupId).ToList();
+        scenes = scenes.Where(s => s.Group.Id == id).ToList();
         return scenes;
+    }
+
+    /// <summary>
+    /// Returns all active HueScenes of the Hue bridge.
+    /// </summary>
+    /// <returns>A list of all active HueScenes.</returns>
+    public async Task<List<HueScene>> GetActiveScenes()
+    {
+        List<HueScene> scenes = await GetScenes();
+        scenes = scenes.Where(s => s.Status != "inactive").ToList();
+        return scenes;
+    }
+
+    /// <summary>
+    /// Gets the active scene of a HueLocation.
+    /// </summary>
+    /// <param name="location">The location to get the scene of.</param>
+    /// <returns>The active HueScene, null if no scene is active.</returns>
+    public async Task<HueScene?> GetActiveScene(HueLocation location)
+    {
+        List<HueScene> scenes = await GetScenes(location.Id);
+        var activeScene = scenes.Where(s => s.Status != "inactive").First();
+        return activeScene;
     }
 
     /// <summary>
     /// Turns "on" the parameterized HueScene. Updates the parameterized HueScene in place.
     /// </summary>
     /// <param name="scene">The scene to set.</param>
+    /// <param name="duration">Transition to the scene within the given timeframe.</param>
+    /// <param name="scene">Overrides the scene's default brightness.</param>
     /// <returns>The passed in HueScene</returns>
-    public async Task<HueScene> SetScene(HueScene scene)
+    public async Task<HueScene> SetScene(HueScene scene, double? brightness = null, int? duration = null)
     {
-        string body = "{\"recall\": {\"action\": \"active\"}}";
+        var recallDict = new Dictionary<string, object>
+        {
+            {"action", "active"}
+        };
+
+        if (brightness != null)
+        {
+            recallDict["dimming"] = new Dictionary<string, object>
+            {
+                { "brightness", brightness }
+            };
+        }
+
+        if (duration != null)
+        {
+            recallDict["duration"] = duration;
+        }
+
+        var bodyDict = new Dictionary<string, object>
+        {
+            {"recall", recallDict}
+        };
+
+
+        string body = JsonConvert.SerializeObject(bodyDict);
 
         // Returned value is just the scenes id. HueRepository will throw any errors if there were some. 
         await Repository.Put($"resource/scene/{scene.Id}", body);
@@ -95,5 +146,29 @@ public class HueSceneController : HueController
         var updatedScene = await GetScene(scene.Id);
         scene.Status = updatedScene.Status;
         return scene;
+    }
+
+    /// <summary>
+    /// Updates the brightness of a scene, does not write any values, overrides scene's default brightness. 
+    /// </summary>
+    /// <param name="scene">The scene to update the brightness of.</param>
+    /// <param name="brightness"></param>
+    public async void SetSceneBrightness(HueScene scene, double brightness)
+    {
+        var bodyDict = new Dictionary<string, object>
+        {
+            ["recall"] = new Dictionary<string, object>
+            {
+                ["dimming"] = new Dictionary<string, object>
+                {
+                    {"brightness", brightness}
+                }
+            }
+        };
+
+        string body = JsonConvert.SerializeObject(bodyDict);
+
+        // Returned value is just the scenes id. HueRepository will throw any errors if there were some. 
+        await Repository.Put($"resource/scene/{scene.Id}", body);
     }
 }

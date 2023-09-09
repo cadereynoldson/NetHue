@@ -50,7 +50,7 @@ public class HueLightController : HueController
     /// </summary>
     /// <param name="room">The room to get the lights of.</param>
     /// <returns>A list of HueLights</returns>
-    public async Task<List<HueLight>> GetLights(HueRoom room)
+    public async Task<List<HueLight>> GetLights(HueLocation room)
     {
         var lights = await GetLights();
 
@@ -99,7 +99,6 @@ public class HueLightController : HueController
         using JsonDocument document = JsonDocument.Parse(response);
         var rootElement = document.RootElement;
 
-        // Response will contain _blank_
         var lightData = rootElement.GetProperty("data").EnumerateArray().First();
         return light;
     }
