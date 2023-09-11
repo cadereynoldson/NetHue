@@ -106,7 +106,7 @@ public class HueLightTests
         {
             await Controller.UpdateLightState(
                 light,
-                new HueLightStateBuilder().Color(RgbColor.Random(), light.CieColorGamut)
+                new HueLightStateBuilder().Color(RgbColor.Random(), light.CieColorGamut!)
             );
         }
     }
@@ -127,7 +127,7 @@ public class HueLightTests
         {
             await Controller.UpdateLightState(
                 light,
-                new HueLightStateBuilder().Color(RgbColor.Green, light.CieColorGamut)
+                new HueLightStateBuilder().Color(RgbColor.Green, light.CieColorGamut!)
             );
         }
     }
@@ -150,7 +150,7 @@ public class HueLightTests
         {
             await Controller.UpdateLightState(
                 light,
-                new HueLightStateBuilder().Color(color, light.CieColorGamut)
+                new HueLightStateBuilder().Color(color, light.CieColorGamut!)
             );
         }
     }
@@ -223,8 +223,8 @@ public class HueLightTests
     public async Task GetLightsWithPowerupMode()
     {
         List<HueLight> hueLights = await Controller.GetLights();
-        hueLights = hueLights.Where(l => l.State.Powerup != null).ToList();
-        hueLights = hueLights.Where(l => l.State.Powerup!.Preset != HueLightPowerup.PowerupPreset.SAFETY).ToList();
+        hueLights = hueLights.Where(l => l.Powerup != null).ToList();
+        hueLights = hueLights.Where(l => l.Powerup!.Preset != HueLightPowerup.PowerupPreset.SAFETY).ToList();
 
         foreach (HueLight light in hueLights)
         {
@@ -249,7 +249,7 @@ public class HueLightTests
             {
                 await Controller.UpdateLightState(
                     light,
-                    new HueLightStateBuilder().Color(RgbColor.Random(), light.CieColorGamut)
+                    new HueLightStateBuilder().Color(RgbColor.Random(), light.CieColorGamut!)
                 );
             }
             Thread.Sleep(1000);

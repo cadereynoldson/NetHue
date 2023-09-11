@@ -20,26 +20,23 @@ public class HueLightSimpleJsonConverter : HueSimpleJsonConverter
             Name = ParseName(data),
             Owner = ParseResourceIdentifier(data.GetProperty("owner")),
             Archetype = ParseArchetype(data),
-            State = new HueLightState
+            On = data.GetProperty("on").GetProperty("on").GetBoolean(),
+            Brightness = data.GetProperty("dimming").GetProperty("brightness").GetDouble(),
+            Color = ParseCieColor(data.GetProperty("color").GetProperty("xy")),
+            ColorTemperature = ParseMiredColor(data.GetProperty("color_temperature").GetProperty("mirek")),
+            Dynamics = new HueLightDynamics
             {
-                On = data.GetProperty("on").GetProperty("on").GetBoolean(),
-                Brightness = data.GetProperty("dimming").GetProperty("brightness").GetDouble(),
-                Color = ParseCieColor(data.GetProperty("color").GetProperty("xy")),
-                ColorTemperature = ParseMiredColor(data.GetProperty("color_temperature").GetProperty("mirek")),
-                Dynamics = new HueLightDynamics
-                {
-                    Status = data.GetProperty("dynamics").GetProperty("status").GetString(),
-                    Speed = data.GetProperty("dynamics").GetProperty("speed").GetDouble(),
-                    SpeedValid = data.GetProperty("dynamics").GetProperty("speed_valid").GetBoolean(),
-                    DynamicStatusValues = ParseStringList(data.GetProperty("dynamics").GetProperty("status_values"))
-                },
-                Signaling = ParseSignalingState(data.GetProperty("signaling")),
-                Mode = data.GetProperty("mode").GetString()!,
-                Gradient = ParseHueLightGradient(data),
-                Effect = ParseHueLightEffect(data),
-                TimedEffect = ParseHueLightTimedEffect(data),
-                Powerup = ParsePowerup(data)
+                Status = data.GetProperty("dynamics").GetProperty("status").GetString(),
+                Speed = data.GetProperty("dynamics").GetProperty("speed").GetDouble(),
+                SpeedValid = data.GetProperty("dynamics").GetProperty("speed_valid").GetBoolean(),
+                DynamicStatusValues = ParseStringList(data.GetProperty("dynamics").GetProperty("status_values"))
             },
+            Signaling = ParseSignalingState(data.GetProperty("signaling")),
+            Mode = data.GetProperty("mode").GetString()!,
+            Gradient = ParseHueLightGradient(data),
+            Effect = ParseHueLightEffect(data),
+            TimedEffect = ParseHueLightTimedEffect(data),
+            Powerup = ParsePowerup(data),
             MiredColorRange = new MiredColorRange
             {
                 Minimum = data.GetProperty("color_temperature").GetProperty("mirek_schema").GetProperty("mirek_minimum").GetInt32(),
