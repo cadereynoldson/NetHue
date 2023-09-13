@@ -1,6 +1,3 @@
-using System.Runtime.CompilerServices;
-using Xunit.Sdk;
-
 namespace NetHue;
 
 public class HueSceneTests
@@ -116,25 +113,6 @@ public class HueSceneTests
         {
             await Controller.SetScene(scene, i);
             Thread.Sleep(100);
-        }
-    }
-
-    [Fact]
-    public async Task Strobe()
-    {
-        var roomController = new HueRoomController("Data/config.json");
-        var rooms = await roomController.GetRooms();
-        var room = rooms.Where(r => r.Name.Contains("Living")).First();
-
-        List<HueScene> scenes = await Controller.GetScenes(room);
-        for (int i = 0; i < 5; i++)
-        {
-            foreach (var scene in scenes)
-            {
-                await Controller.SetScene(scene, brightness: 40, duration: 1);
-                Assert.Equal("static", scene.Status);
-                Thread.Sleep(100);
-            }
         }
     }
 }

@@ -50,8 +50,8 @@ public class HueHttpHelper
     {
         try
         {
-            var endpoint = $"{this.BaseEndpoint}/{path}";
-            HttpResponseMessage response = await this.Client.GetAsync(endpoint);
+            var endpoint = $"{BaseEndpoint}/{path}";
+            HttpResponseMessage response = await Client.GetAsync(endpoint);
 
             var responseContent = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)

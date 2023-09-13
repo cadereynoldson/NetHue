@@ -99,7 +99,17 @@ public class HueSceneController : HueController
     /// <returns>The active HueScene, null if no scene is active.</returns>
     public async Task<HueScene?> GetActiveScene(HueLocation location)
     {
-        List<HueScene> scenes = await GetScenes(location.Id);
+        return await GetActiveScene(location.Id);
+    }
+
+    /// <summary>
+    /// Gets the active scene of a HueLocation
+    /// </summary>
+    /// <param name="locationId">The ID of the location to get the scene of.</param>
+    /// <returns>The active HueScene, null if no scene is active.</returns>
+    public async Task<HueScene?> GetActiveScene(string locationId)
+    {
+        List<HueScene> scenes = await GetScenes(locationId);
         var activeScene = scenes.Where(s => s.Status != "inactive").First();
         return activeScene;
     }
