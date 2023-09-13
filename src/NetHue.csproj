@@ -4,6 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,7 +19,7 @@
 
   <PropertyGroup>
     <PackageId>NetHue</PackageId>
-    <Version>0.0.2</Version>
+    <Version>0.0.3</Version>
     <Authors>Cade Reynoldson</Authors>
     <Description>Library for interaction with Philips Hue devices</Description>
     <PackageTags>lighting, smarthome, hue, philips</PackageTags>
