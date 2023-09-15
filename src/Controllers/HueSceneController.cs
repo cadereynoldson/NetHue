@@ -110,16 +110,23 @@ public class HueSceneController : HueController
     public async Task<HueScene?> GetActiveScene(string locationId)
     {
         List<HueScene> scenes = await GetScenes(locationId);
-        var activeScene = scenes.Where(s => s.Status != "inactive").First();
-        return activeScene;
+        try
+        {
+            var activeScene = scenes.Where(s => s.Status != "inactive").First();
+            return activeScene;
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     /// <summary>
     /// Turns "on" the parameterized HueScene. Updates the parameterized HueScene in place.
     /// </summary>
     /// <param name="scene">The scene to set.</param>
+    /// <param name="brightness">Overrides the scene's default brightness.</param>
     /// <param name="duration">Transition to the scene within the given timeframe.</param>
-    /// <param name="scene">Overrides the scene's default brightness.</param>
     /// <returns>The passed in HueScene</returns>
     public async Task<HueScene> SetScene(HueScene scene, double? brightness = null, int? duration = null)
     {

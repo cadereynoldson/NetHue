@@ -1,6 +1,5 @@
 namespace NetHue;
 
-using System.Runtime.CompilerServices;
 using System.Text.Json;
 using JsonConversion;
 

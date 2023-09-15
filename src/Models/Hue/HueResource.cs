@@ -14,8 +14,7 @@ public abstract record HueResource
     /// <summary>
     /// The human readable name of this HueModel object.
     /// </summary>
-    /// [JsonPropertyName()]
-    public string Name { get; set; } = default!;
+    public string? Name { get; set; } = default!;
 
     /// <summary>
     /// The archetype of this HueResource. 

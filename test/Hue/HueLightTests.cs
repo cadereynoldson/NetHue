@@ -234,25 +234,4 @@ public class HueLightTests
             );
         }
     }
-
-    [Fact]
-    public async Task PartyMode()
-    {
-        List<HueLight> hueLights = await Controller.GetLights();
-        // Filter on lights that have the name "Lamp" in it. 
-        hueLights = hueLights.Where(l => l.Name.Contains(LIGHT_NAME_CONTAINS)).ToList();
-
-        for (int i = 0; i < 10; i++)
-        {
-            /// Change to random colors: 
-            foreach (HueLight light in hueLights)
-            {
-                await Controller.UpdateLightState(
-                    light,
-                    new HueLightStateBuilder().Color(RgbColor.Random(), light.CieColorGamut!)
-                );
-            }
-            Thread.Sleep(1000);
-        }
-    }
 }
