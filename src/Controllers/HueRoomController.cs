@@ -40,4 +40,22 @@ public class HueRoomController : HueController
         }
         return rooms;
     }
+
+    /// <summary>
+    /// Gets a HueRoom given it's ID. If no room exists with the given ID, returns null.
+    /// </summary>
+    /// <param name="roomId">The ID of the room to fetch.</param>
+    /// <returns>The HueRoom with a given ID, null if no room exists with ID.</returns>
+    public async Task<HueRoom?> GetRoom(string roomId)
+    {
+        var rooms = await GetRooms();
+        try
+        {
+            return rooms.Where(r => r.Id == roomId).First();
+        }
+        catch
+        {
+            return null;
+        }
+    }
 }

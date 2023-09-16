@@ -7,34 +7,14 @@ using System.Text.Json;
 /// <summary>
 /// Handles fetching data from a Phillips Hue Bridge. 
 /// </summary>
-public class HueRepository
+public class HueRepository : BaseHueRepository
 {
 
-    /// <summary>
-    /// The base endpoint of the Philips Hue bridge. 
-    /// </summary>
-    private readonly string BaseEndpoint;
-
-    /// <summary>
-    /// HueBridge configuration storing information on the HueBridge. 
-    /// </summary>
-    private readonly HueConfiguration Configuration;
-
-    /// <summary>
-    /// Creates a new insance of a HueRepository. 
-    /// </summary>
-    /// <param name="configPath">The path to the HueBridgeConfiguration compatible JSON file.</param>
-    public HueRepository(string configPath) : this(HueConfiguration.FromJson(configPath)) { }
-
-    /// <summary>
-    /// Creates a new instance of a HueRepository. 
-    /// </summary>
-    /// <param name="config">The configuration data of a HueBridge.</param>
-    public HueRepository(HueConfiguration config)
-    {
-        BaseEndpoint = $"https://{config.Ip}/clip/v2";
-        Configuration = config;
-    }
+    /// <inheritdoc/>
+    public HueRepository(string configPath) : base(configPath) {}
+    
+    /// <inheritdoc/>
+    public HueRepository(HueConfiguration config) : base(config) {}
 
     /// <summary>
     /// Sends a GET request to the Hue API endpoint.
@@ -108,13 +88,13 @@ public class HueRepository
     }
 
     /// <summary>
-    /// 
+    /// Builds an exception containing the errors of a response from the bridge.
     /// </summary>
-    /// <param name="response"></param>
-    /// <param name="method"></param>
-    /// <param name="responseContent"></param>
-    /// <returns></returns>
-    private HueHttpException BuildErrorException(ref HttpResponseMessage response, string method, string responseContent)
+    /// <param name="response">The response containing the errors</param>
+    /// <param name="method">The method in which this error occured. (GET/PUT/etc.)</param>
+    /// <param name="responseContent">The content of the response.</param>
+    /// <returns>HueHttpException containing the errors.</returns>
+    private static HueHttpException BuildErrorException(ref HttpResponseMessage response, string method, string responseContent)
     {
         var messageHeader = response.IsSuccessStatusCode ?
                     $"HueRepository.{method}() succeeded with status code {response.StatusCode}, but errors exist in response" :
@@ -124,26 +104,6 @@ public class HueRepository
             $"{messageHeader}: {ParseErrors(responseContent)}",
             response: responseContent
         );
-    }
-
-    /// <summary>
-    /// Builds a HTTP client to be used for calls to a HueBridge. 
-    /// </summary>
-    /// <returns>A HttpClient to be used for calls to a HueBridge.</returns>
-    private HttpClient BuildHttpClient()
-    {
-        var handler = new HttpClientHandler
-        {
-            ClientCertificateOptions = ClientCertificateOption.Manual,
-            ServerCertificateCustomValidationCallback =
-            (httpRequestMessage, cert, cetChain, policyErrors) =>
-            {
-                return true;
-            }
-        };
-        var client = new HttpClient(handler);
-        client.DefaultRequestHeaders.Add("hue-application-key", Configuration.AppKey);
-        return client;
     }
 
     /// <summary>
@@ -177,15 +137,16 @@ public class HueRepository
     /// <returns>A string containing zero or more errors.</returns>
     public static string ParseErrors(JsonElement json)
     {
-        var str = "";
+        var errors = new List<string>();
         var errorCount = 0;
 
         foreach (JsonElement errorData in json.GetProperty("errors").EnumerateArray())
         {
             var errorMessage = errorData.GetProperty("description");
-            str += $"<{++errorCount}>: {errorMessage}";
+
+            errors.Add($"{{<{++errorCount}>: {errorMessage}}}");
         }
 
-        return str;
+        return string.Join(", ", errors);
     }
 }

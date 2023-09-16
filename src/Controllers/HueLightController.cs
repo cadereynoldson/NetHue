@@ -70,7 +70,7 @@ public class HueLightController : HueController
     /// </summary>
     /// <param name="id">The ID of the light to fetch.</param>
     /// <exception cref="HueHttpException">On non-successful fetching of the light.</exception>
-    public async Task<HueLight> GetLight(string id)
+    public async Task<HueLight?> GetLight(string id)
     {
         // Make call
         string response = await Repository.Get($"resource/light/{id}");
@@ -80,8 +80,15 @@ public class HueLightController : HueController
         var rootElement = document.RootElement;
 
         // Response will only contain one light. 
-        var lightData = rootElement.GetProperty("data").EnumerateArray().First();
-        return SimpleJson.Convert<HueLight>(lightData)!;
+        try
+        {
+            var lightData = rootElement.GetProperty("data").EnumerateArray().First();
+            return SimpleJson.Convert<HueLight>(lightData)!;
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     /// <summary>
@@ -109,10 +116,17 @@ public class HueLightController : HueController
     /// </summary>
     /// <param name="locationId">The id of the location to get the lights of.</param>
     /// <returns>The HueGroupedLights of a room</returns>
-    public async Task<HueGroupedLights> GetGroupedLights(string locationId)
+    public async Task<HueGroupedLights?> GetGroupedLights(string locationId)
     {
         var lights = await GetGroupedLights();
-        return lights.Where(l => l.Owner.Id == locationId).First();
+        try
+        {
+            return lights.Where(l => l.Owner.Id == locationId).First();
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     /// <summary>

@@ -30,6 +30,24 @@ public class HueGroupedLightsTests
         var room = (await RoomController.GetRooms()).Where(r => r.Name!.Contains("Cade")).First();
         var group = await Controller.GetGroupedLights(room.Id);
 
-        await Controller.UpdateGroupedLightsState(group, new HueLightStateBuilder().Brightness(1));
+        await Controller.UpdateGroupedLightsState(group, new HueLightStateBuilder().Brightness(100));
+    }
+
+    [Fact]
+    public async Task TurnLightsOff()
+    {
+        var room = (await RoomController.GetRooms()).Where(r => r.Name!.Contains("Cade")).First();
+        var group = await Controller.GetGroupedLights(room.Id);
+
+        await Controller.UpdateGroupedLightsState(group, new HueLightStateBuilder().Off());
+    }
+
+    [Fact]
+    public async Task TurnLightsOn()
+    {
+        var room = (await RoomController.GetRooms()).Where(r => r.Name!.Contains("Cade")).First();
+        var group = await Controller.GetGroupedLights(room.Id);
+
+        await Controller.UpdateGroupedLightsState(group, new HueLightStateBuilder().On());
     }
 }
