@@ -24,14 +24,4 @@ public class SimpleJson
 
         throw new InvalidOperationException($"No DynamicToClassConverterAttribute found for type {typeof(T).Name}");
     }
-
-    /// <summary>
-    /// Converts json formatted string to an object of type T. 
-    /// <param name="json">The JSON formatted string to convert.</param>
-    /// </summary> 
-    public static T? Convert<T>(string json)
-    {
-        using JsonDocument document = JsonDocument.Parse(json);
-        return Convert<T>(document.RootElement);
-    }
 }

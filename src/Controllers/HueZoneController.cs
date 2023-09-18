@@ -3,6 +3,9 @@ using JsonConversion;
 
 namespace NetHue;
 
+/// <summary>
+/// Class for containing Hue zones configured on a HueBridge.
+/// </summary>
 public class HueZoneController : HueController
 {
     /// <inheritdoc/>

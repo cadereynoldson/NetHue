@@ -18,6 +18,11 @@ public class HueHttpHelper
     /// </summary>
     private readonly HttpClient Client;
 
+    /// <summary>
+    /// Creates a new instance of a HueHttpHelper. 
+    /// </summary>
+    /// <param name="ip">The IP of the HueBridge to make calls to.</param>
+    /// <param name="appKey">The application access key which allows for access to the HueBridge.</param>
     public HueHttpHelper(string ip, string appKey)
     {
         BaseEndpoint = $"https://{ip}/clip/v2";

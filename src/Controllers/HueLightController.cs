@@ -98,10 +98,10 @@ public class HueLightController : HueController
     public async Task<List<HueGroupedLights>> GetGroupedLights()
     {
         string response = await Repository.Get("resource/grouped_light");
-        
+
         using JsonDocument document = JsonDocument.Parse(response);
         var rootElement = document.RootElement;
-        
+
         var groupedLights = new List<HueGroupedLights>();
         foreach (JsonElement element in rootElement.GetProperty("data").EnumerateArray())
         {

@@ -1,5 +1,8 @@
 namespace NetHue;
 
+/// <summary>
+/// Class containing information on RGB colors.
+/// </summary>
 public class RgbColor
 {
 
@@ -8,7 +11,7 @@ public class RgbColor
     /// </summary>
     public static RgbColor Red { get; } = new RgbColor(255, 0, 0);
 
-    // <summary>
+    /// <summary>
     /// RGB preset color: Green
     /// </summary>
     public static RgbColor Green { get; } = new RgbColor(0, 255, 0);

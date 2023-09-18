@@ -30,6 +30,7 @@ public class HueConfiguration
         AppKey = appKey;
     }
 
+    /// <summary>
     /// Parses a HueBridgeConfiguration from a configuration file.
     /// This file should be in the following format: 
     /// { 

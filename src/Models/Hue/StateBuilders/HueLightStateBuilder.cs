@@ -2,11 +2,17 @@ using Newtonsoft.Json.Linq;
 
 namespace NetHue;
 
+/// <summary>
+/// Class for updating states of a HueLight.
+/// </summary>
 public class HueLightStateBuilder
 {
 
     private readonly JObject State;
 
+    /// <summary>
+    /// Creates a new instance of a HueLightStateBuilder
+    /// </summary>
     public HueLightStateBuilder()
     {
         State = new JObject();

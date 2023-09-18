@@ -5,5 +5,8 @@ namespace NetHue;
 /// </summary>
 public record HueLightTimedEffect : HueLightEffect
 {
+    /// <summary>
+    /// The duration of a HueLightTimedEffect.
+    /// </summary>
     public int Duration;
 }

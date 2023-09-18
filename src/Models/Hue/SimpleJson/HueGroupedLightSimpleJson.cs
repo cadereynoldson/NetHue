@@ -1,11 +1,11 @@
 using System.Text.Json;
 
-namespace NetHue; 
+namespace NetHue;
 
 /// <summary>
 /// Class for parsing HueGroupedLights from json elements.
 /// </summary>
-public class HueGroupedLightSimpleJsonConverter : HueSimpleJsonConverter
+class HueGroupedLightSimpleJsonConverter : HueSimpleJsonConverter
 {
     /// <summary>
     /// Creates a HueGroupedLight from a JsonElement directly containing the information of a HueGroupedLight. 
@@ -23,10 +23,5 @@ public class HueGroupedLightSimpleJsonConverter : HueSimpleJsonConverter
             AlertActionValues = HasProperty(data, "alert") ? ParseStringList(data.GetProperty("alert").GetProperty("action_values")) : null,
             SignalingValues = HasProperty(data, "signaling") ? ParseStringList(data.GetProperty("signaling").GetProperty("signal_values")) : null
         };
-    }
-
-    public override string ToJson(object data)
-    {
-        throw new NotImplementedException();
     }
 }

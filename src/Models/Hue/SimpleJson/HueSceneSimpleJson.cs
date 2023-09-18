@@ -2,7 +2,7 @@ namespace NetHue;
 
 using System.Text.Json;
 
-public class HueSceneSimpleJsonConverter : HueSimpleJsonConverter
+class HueSceneSimpleJsonConverter : HueSimpleJsonConverter
 {
     public override object Convert(JsonElement data)
     {
@@ -17,11 +17,6 @@ public class HueSceneSimpleJsonConverter : HueSimpleJsonConverter
             AutoDynamic = data.GetProperty("auto_dynamic").GetBoolean(),
             Status = data.GetProperty("status").GetProperty("active").GetString()!
         };
-    }
-
-    public override string ToJson(object data)
-    {
-        throw new NotImplementedException();
     }
 
     private static List<HueSceneAction> ParseSceneActionList(JsonElement data)

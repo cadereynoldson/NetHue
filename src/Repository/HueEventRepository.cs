@@ -1,3 +1,6 @@
+using System.Text.Json;
+using JsonConversion;
+
 namespace NetHue;
 
 /// <summary>
@@ -17,7 +20,12 @@ public class HueEventRepository : HueRepository
     /// <inheritdoc/>
     public HueEventRepository(HueConfiguration config) : base(config) { }
 
-    public async void StartEventStream(CancellationToken? cancellationToken = null)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="resourceManager"></param>
+    /// <param name="cancellationToken"></param>
+    public async void StartEventStream(HueResourceManager resourceManager, CancellationToken? cancellationToken = null)
     {
         // If an event stream is already started, cancel it.
         EventStreamCancellationTokenSource?.Cancel();
@@ -44,8 +52,30 @@ public class HueEventRepository : HueRepository
                 using var streamReader = new StreamReader(await client.GetStreamAsync(streamUrl, token));
                 while (!streamReader.EndOfStream)
                 {
-                    var response = await streamReader.ReadLineAsync();
-                    Console.WriteLine($"Message: {response}");
+                    string? response = await streamReader.ReadLineAsync();
+                    if (response != null)
+                    {
+                        // We have a response, lets parse data.
+                        using JsonDocument document = JsonDocument.Parse(response);
+                        var rootElement = document.RootElement;
+                        var events = new List<HueResourceEvent>();
+
+                        // For each response on the event list, will be an array.
+                        foreach (var elements in rootElement.EnumerateArray())
+                        {
+                            foreach (var element in elements.GetProperty("data").EnumerateArray())
+                            {
+                                string resourceType = element.GetProperty("type").GetString()!;
+                                switch (resourceType)
+                                {
+                                    case "light":
+                                        events.Add(SimpleJson.Convert<HueLightEvent>(element)!);
+                                        break;
+                                }
+                            }
+                        }
+                        resourceManager.Apply(events);
+                    }
                 }
             }
             catch { }

@@ -2,6 +2,9 @@ using JsonConversion;
 
 namespace NetHue;
 
+/// <summary>
+/// Class containing information of a Hue scene. 
+/// </summary>
 [SimpleJsonConverter(typeof(HueSceneSimpleJsonConverter))]
 public record HueScene : HueResource
 {
@@ -26,7 +29,7 @@ public record HueScene : HueResource
     public double Speed { get; set; } = default!;
 
     /// <summary>
-    /// Indicates where to automatically start the dynamically on active recall.
+    /// Indicates whether to automatically start the scene dynamically on active recall.
     /// </summary>
     public bool AutoDynamic { get; set; } = default!;
 

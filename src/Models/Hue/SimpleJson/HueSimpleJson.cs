@@ -3,7 +3,7 @@ namespace NetHue;
 using System.Text.Json;
 using JsonConversion;
 
-public abstract class HueSimpleJsonConverter : ISimpleJsonConverter
+abstract class HueSimpleJsonConverter : ISimpleJsonConverter
 {
     /// <summary>
     /// Parses the ID of a HueResource given a JsonElement containing the property "id" 
@@ -234,5 +234,4 @@ public abstract class HueSimpleJsonConverter : ISimpleJsonConverter
     }
 
     public abstract object Convert(JsonElement data);
-    public abstract string ToJson(object data);
 }

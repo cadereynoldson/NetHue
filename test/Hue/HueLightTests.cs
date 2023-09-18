@@ -28,7 +28,7 @@ public class HueLightTests
         Assert.NotEmpty(lights);
 
         // Attempt to get the first light by its id:
-        HueLight light = await Controller.GetLight(lights[0].Id);
+        HueLight? light = await Controller.GetLight(lights[0].Id);
         Assert.NotNull(light);
         Assert.Equal(lights[0].Id, light.Id);
     }
@@ -43,7 +43,7 @@ public class HueLightTests
         var nonExistantId = "00000000-0000-0000-0000-000000000000";
         try
         {
-            HueLight light = await Controller.GetLight(nonExistantId);
+            HueLight? light = await Controller.GetLight(nonExistantId);
         }
         catch (HueHttpException e)
         {
@@ -60,7 +60,7 @@ public class HueLightTests
     {
         var roomController = new HueRoomController("Data/config.json");
         var rooms = await roomController.GetRooms();
-        var room = rooms.Where(r => r.Name.Contains("Cade")).First();
+        var room = rooms.Where(r => r.Name!.Contains("Cade")).First();
 
         var lights = await Controller.GetLights(room);
         Assert.NotEmpty(lights);
@@ -75,7 +75,7 @@ public class HueLightTests
     {
         List<HueLight> hueLights = await Controller.GetLights();
         // Filter on lights that have the name "Lamp" in it. 
-        hueLights = hueLights.Where(l => l.Name.Contains(LIGHT_NAME_CONTAINS)).ToList();
+        hueLights = hueLights.Where(l => l.Name!.Contains(LIGHT_NAME_CONTAINS)).ToList();
 
         /// Turn off HueLights. 
         foreach (HueLight light in hueLights)
@@ -99,7 +99,7 @@ public class HueLightTests
     {
         List<HueLight> hueLights = await Controller.GetLights();
         // Filter on lights that have the name "Lamp" in it. 
-        hueLights = hueLights.Where(l => l.Name.Contains(LIGHT_NAME_CONTAINS)).ToList();
+        hueLights = hueLights.Where(l => l.Name!.Contains(LIGHT_NAME_CONTAINS)).ToList();
 
         // Change to random colors: 
         foreach (HueLight light in hueLights)
@@ -120,7 +120,7 @@ public class HueLightTests
     {
         List<HueLight> hueLights = await Controller.GetLights();
         // Filter on lights that have the name "Lamp" in it. 
-        hueLights = hueLights.Where(l => l.Name.Contains(LIGHT_NAME_CONTAINS)).ToList();
+        hueLights = hueLights.Where(l => l.Name!.Contains(LIGHT_NAME_CONTAINS)).ToList();
 
         /// Change to random colors: 
         foreach (HueLight light in hueLights)
@@ -141,7 +141,7 @@ public class HueLightTests
     {
         List<HueLight> hueLights = await Controller.GetLights();
         // Filter on lights that have the name "Lamp" in it. 
-        hueLights = hueLights.Where(l => l.Name.Contains(LIGHT_NAME_CONTAINS)).ToList();
+        hueLights = hueLights.Where(l => l.Name!.Contains(LIGHT_NAME_CONTAINS)).ToList();
 
         var color = RgbColor.Teal;
 
@@ -160,7 +160,7 @@ public class HueLightTests
     {
         List<HueLight> hueLights = await Controller.GetLights();
         // Filter on lights that have the name "Lamp" in it. 
-        hueLights = hueLights.Where(l => l.Name.Contains(LIGHT_NAME_CONTAINS)).ToList();
+        hueLights = hueLights.Where(l => l.Name!.Contains(LIGHT_NAME_CONTAINS)).ToList();
 
         foreach (HueLight light in hueLights)
         {
@@ -176,7 +176,7 @@ public class HueLightTests
     {
         List<HueLight> hueLights = await Controller.GetLights();
         // Filter on lights that have the name "Lamp" in it. 
-        hueLights = hueLights.Where(l => l.Name.Contains(LIGHT_NAME_CONTAINS)).ToList();
+        hueLights = hueLights.Where(l => l.Name!.Contains(LIGHT_NAME_CONTAINS)).ToList();
 
         foreach (HueLight light in hueLights)
         {
@@ -192,7 +192,7 @@ public class HueLightTests
     {
         List<HueLight> hueLights = await Controller.GetLights();
         // Filter on lights that have the name "Lamp" in it. 
-        hueLights = hueLights.Where(l => l.Name.Contains(LIGHT_NAME_CONTAINS)).ToList();
+        hueLights = hueLights.Where(l => l.Name!.Contains(LIGHT_NAME_CONTAINS)).ToList();
 
         foreach (HueLight light in hueLights)
         {
@@ -208,7 +208,7 @@ public class HueLightTests
     {
         List<HueLight> hueLights = await Controller.GetLights();
         // Filter on lights that have the name "Lamp" in it. 
-        hueLights = hueLights.Where(l => l.Name.Contains(LIGHT_NAME_CONTAINS)).ToList();
+        hueLights = hueLights.Where(l => l.Name!.Contains(LIGHT_NAME_CONTAINS)).ToList();
 
         foreach (HueLight light in hueLights)
         {

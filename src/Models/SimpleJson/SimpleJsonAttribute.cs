@@ -13,7 +13,7 @@ public class SimpleJsonConverterAttribute : Attribute
 
     /// <summary>
     /// Creates a new instance of a FromJsonConverterAttribute.
-    /// <param name=converterType> The object type this attribute handles conversion for. </param>
+    /// <param name="converterType"> The object type this attribute handles conversion for. </param>
     /// </summary>
     public SimpleJsonConverterAttribute(Type converterType)
     {

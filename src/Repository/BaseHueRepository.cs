@@ -31,7 +31,7 @@ public abstract class BaseHueRepository
         Configuration = config;
     }
 
-        /// <summary>
+    /// <summary>
     /// Builds a HTTP client to be used for calls to a HueBridge. 
     /// </summary>
     /// <returns>A HttpClient to be used for calls to a HueBridge.</returns>

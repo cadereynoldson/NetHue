@@ -20,7 +20,7 @@ public class HueRoomController : HueController
     /// <summary>
     /// Gets all of the rooms configured with the connected hue bridge. 
     /// </summary>
-    /// <returns>A list of HueRooms./returns>
+    /// <returns>A list of HueRooms.</returns>
     public async Task<List<HueRoom>> GetRooms()
     {
         var response = await Repository.Get("/resource/room");

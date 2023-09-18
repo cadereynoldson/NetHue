@@ -20,10 +20,4 @@ public abstract record HueResource
     /// The archetype of this HueResource. 
     /// </summary>
     public string? Archetype { get; set; } = default!;
-
-    /// <summary>
-    /// Other data associated with this object, examples being product type, product name, and so on. 
-    /// </summary>
-    public Dictionary<string, string>? MetaData { get; set; }
-
 }

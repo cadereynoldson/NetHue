@@ -11,10 +11,10 @@ public class HueRepository : BaseHueRepository
 {
 
     /// <inheritdoc/>
-    public HueRepository(string configPath) : base(configPath) {}
-    
+    public HueRepository(string configPath) : base(configPath) { }
+
     /// <inheritdoc/>
-    public HueRepository(HueConfiguration config) : base(config) {}
+    public HueRepository(HueConfiguration config) : base(config) { }
 
     /// <summary>
     /// Sends a GET request to the Hue API endpoint.

@@ -5,7 +5,7 @@ using System.Text.Json;
 /// <summary>
 /// Class which handles parsing Json to HueLights. 
 /// </summary>
-public class HueLightSimpleJsonConverter : HueSimpleJsonConverter
+class HueLightSimpleJsonConverter : HueSimpleJsonConverter
 {
     /// <summary>
     /// Creates a HueLight from dynamic JSON data provided from the Hue API. 
@@ -50,11 +50,6 @@ public class HueLightSimpleJsonConverter : HueSimpleJsonConverter
             },
             AlertActionValues = ParseStringList(data.GetProperty("alert").GetProperty("action_values")),
         };
-    }
-
-    public override string ToJson(object data)
-    {
-        throw new NotImplementedException();
     }
 
     private static HueLightEffect? ParseHueLightEffect(JsonElement data)

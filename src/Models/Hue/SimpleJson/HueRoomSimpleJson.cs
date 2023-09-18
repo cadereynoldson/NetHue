@@ -15,9 +15,4 @@ class HueRoomSimpleJsonConverter : HueSimpleJsonConverter
             Services = ParseResourceIdentifierList(data.GetProperty("services"))
         };
     }
-
-    public override string ToJson(object data)
-    {
-        throw new NotImplementedException();
-    }
 }

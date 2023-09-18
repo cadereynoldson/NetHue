@@ -14,10 +14,4 @@ public interface ISimpleJsonConverter
     /// </summary>
     public object Convert(JsonElement data);
 
-    /// <summary>
-    /// Converts the data stored in an object to a JSON formatted string. 
-    /// </summary>
-    /// <param name="data">The object to convert to a JSON formatted string.</param>
-    /// <returns></returns>
-    public string ToJson(object data);
 }

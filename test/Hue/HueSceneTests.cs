@@ -16,7 +16,7 @@ public class HueSceneTests
     {
         var roomController = new HueRoomController("Data/config.json");
         var rooms = await roomController.GetRooms();
-        var room = rooms.Where(r => r.Name.Contains("Cade")).First();
+        var room = rooms.Where(r => r.Name!.Contains("Cade")).First();
 
         List<HueScene> scenes = await Controller.GetScenes(room);
         Assert.NotEmpty(scenes);
@@ -30,7 +30,7 @@ public class HueSceneTests
     {
         var roomController = new HueRoomController("Data/config.json");
         var rooms = await roomController.GetRooms();
-        var room = rooms.Where(r => r.Name.Contains("Cade")).First();
+        var room = rooms.Where(r => r.Name!.Contains("Cade")).First();
 
         List<HueScene> scenes = await Controller.GetScenes(room);
         foreach (var scene in scenes)
@@ -49,7 +49,7 @@ public class HueSceneTests
     {
         var roomController = new HueRoomController("Data/config.json");
         var rooms = await roomController.GetRooms();
-        var room = rooms.Where(r => r.Name.Contains("Cade")).First();
+        var room = rooms.Where(r => r.Name!.Contains("Cade")).First();
 
         List<HueScene> scenes = await Controller.GetScenes(room);
         foreach (var scene in scenes)
@@ -68,7 +68,7 @@ public class HueSceneTests
     {
         var roomController = new HueRoomController("Data/config.json");
         var rooms = await roomController.GetRooms();
-        var room = rooms.Where(r => r.Name.Contains("Cade")).First();
+        var room = rooms.Where(r => r.Name!.Contains("Cade")).First();
 
         List<HueScene> scenes = await Controller.GetScenes(room);
         foreach (var scene in scenes)
@@ -92,7 +92,7 @@ public class HueSceneTests
     {
         var roomController = new HueRoomController("Data/config.json");
         var rooms = await roomController.GetRooms();
-        var room = rooms.Where(r => r.Name.Contains("Cade")).First();
+        var room = rooms.Where(r => r.Name!.Contains("Cade")).First();
 
         var scene = await Controller.GetActiveScene(room);
         Assert.NotNull(scene);
@@ -103,7 +103,7 @@ public class HueSceneTests
     {
         var roomController = new HueRoomController("Data/config.json");
         var rooms = await roomController.GetRooms();
-        var room = rooms.Where(r => r.Name.Contains("Cade")).First();
+        var room = rooms.Where(r => r.Name!.Contains("Cade")).First();
 
         List<HueScene> scenes = await Controller.GetScenes(room);
         var scene = scenes.Last();
