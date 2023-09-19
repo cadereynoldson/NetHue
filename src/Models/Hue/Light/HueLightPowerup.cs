@@ -47,7 +47,7 @@ public record HueLightPowerup
     public MiredColor? ColorTemperature { get; set; } = default!;
 
     /// <summary>
-    /// The CieColor to set the HueLight to on startup. 
+    /// The CieColor to set the <see cref="HueLight"/> to on startup. 
     /// </summary>
     public CieColor? CieColor { get; set; } = default!;
 
@@ -120,19 +120,19 @@ public record HueLightPowerup
     public enum ColorMode
     {
         /// <summary>
-        /// Sets the HueLight to the MiredColor on startup. 
+        /// Sets the <see cref="HueLight"/> to the MiredColor on startup. 
         /// Note, some lights may not support this. 
         /// </summary>
         MIRED,
 
         /// <summary>
-        /// Sets the HueLight to the CIE color on startup.
+        /// Sets the <see cref="HueLight"/> to the CIE color on startup.
         /// Note, some lights may not support this. 
         /// </summary>
         CIE,
 
         /// <summary>
-        /// Sets the HueLight to the color it was prior to turning off on startup. 
+        /// Sets the <see cref="HueLight"/> to the color it was prior to turning off on startup. 
         /// </summary>
         PREVIOUS
     }

@@ -19,7 +19,7 @@
 
   <PropertyGroup>
     <PackageId>NetHue</PackageId>
-    <Version>0.0.9</Version>
+    <Version>0.0.10</Version>
     <Authors>Cade Reynoldson</Authors>
     <Description>Library for interaction with Philips Hue devices</Description>
     <PackageTags>lighting, smarthome, hue, philips</PackageTags>

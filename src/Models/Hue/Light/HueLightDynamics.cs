@@ -22,7 +22,7 @@ public record HueLightDynamics
     public bool SpeedValid { get; set; }
 
     /// <summary>
-    /// Statuses in which a HueLight could be when playing dynamics
+    /// Statuses in which a <see cref="HueLight"/> could be when playing dynamics
     /// </summary>
     public List<string> DynamicStatusValues { get; init; } = default!;
 }

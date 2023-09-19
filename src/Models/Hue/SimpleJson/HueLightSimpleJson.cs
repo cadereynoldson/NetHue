@@ -8,7 +8,7 @@ using System.Text.Json;
 class HueLightSimpleJsonConverter : HueSimpleJsonConverter
 {
     /// <summary>
-    /// Creates a HueLight from dynamic JSON data provided from the Hue API. 
+    /// Creates a <see cref="HueLight"/> from dynamic JSON data provided from the Hue API. 
     /// </summary>
     /// <param name="data">The data to create a HueLight from. </param>
     /// <returns></returns>

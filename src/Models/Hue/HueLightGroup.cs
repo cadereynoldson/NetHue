@@ -5,8 +5,8 @@ namespace NetHue;
 /// <summary>
 /// Class representing a grouped hue 
 /// </summary>
-[SimpleJsonConverter(typeof(HueGroupedLightSimpleJsonConverter))]
-public record HueGroupedLights : HueResource
+[SimpleJsonConverter(typeof(HueLightGroupSimpleJsonConverter))]
+public record HueLightGroup : HueResource
 {
     /// <summary>
     /// The owner of this grouped light. 
@@ -16,12 +16,12 @@ public record HueGroupedLights : HueResource
     /// <summary>
     /// Indicates if this grouped light is on. 
     /// </summary>
-    public bool? On { get; init; } = default!;
+    public bool? On { get; set; } = default!;
 
     /// <summary>
     /// The brightness of this grouped light. 
     /// </summary>
-    public double? Brightness { get; init; } = default!;
+    public double? Brightness { get; set; } = default!;
 
     /// <summary>
     /// Alert effects the grouped light supports. 

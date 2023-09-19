@@ -12,7 +12,7 @@ public record HueLight : HueResource
 {
 
     /// <summary>
-    /// The owner of the HueLight. Owner in a sense of the bridge API.
+    /// The owner of the <see cref="HueLight"/>. Owner in a sense of the bridge API.
     /// </summary>
     public HueResourceIdentifier Owner { get; set; } = default!;
 
@@ -27,7 +27,7 @@ public record HueLight : HueResource
     public double? Brightness { get; set; }
 
     /// <summary>
-    /// The current mode this HueLight is operating in, normal or streaming. 
+    /// The current mode this <see cref="HueLight"/> is operating in, normal or streaming. 
     /// </summary>
     public string Mode { get; set; } = default!;
 
@@ -65,7 +65,7 @@ public record HueLight : HueResource
     public HueLightDynamics? Dynamics { get; set; }
 
     /// <summary>
-    /// Alert effects that the HueLight supports.
+    /// Alert effects that the <see cref="HueLight"/> supports.
     /// </summary>
     public List<string> AlertActionValues { get; init; } = default!;
 
@@ -75,22 +75,22 @@ public record HueLight : HueResource
     public HueLightSignaling? Signaling { get; set; }
 
     /// <summary>
-    /// The state of a HueLight gradient. Will be non-null if device allows for, or has been configured for this.
+    /// The state of a <see cref="HueLight"/> gradient. Will be non-null if device allows for, or has been configured for this.
     /// </summary>
     public HueLightGradient? Gradient { get; set; }
 
     /// <summary>
-    /// The state of a HueLight effect. Will be non-null if currently being used. 
+    /// The state of a <see cref="HueLight"/> effect. Will be non-null if currently being used. 
     /// </summary>
     public HueLightEffect? Effect { get; set; }
 
     /// <summary>
-    /// The state of a timed HueLight effect. Will be non-null if currently being used. 
+    /// The state of a timed <see cref="HueLight"/> effect. Will be non-null if currently being used. 
     /// </summary>
     public HueLightTimedEffect? TimedEffect { get; set; }
 
     /// <summary>
-    /// The state of what will happen to a HueLight on powerup. Will be non-null if currently being used. 
+    /// The state of what will happen to a <see cref="HueLight"/> on powerup. Will be non-null if currently being used. 
     /// </summary>
     public HueLightPowerup? Powerup { get; set; }
 }

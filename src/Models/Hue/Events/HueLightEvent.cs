@@ -3,7 +3,7 @@ using JsonConversion;
 namespace NetHue;
 
 /// <summary>
-/// Record containing updated values of a HueLight.
+/// Class containing updated values of a HueLight.
 /// </summary>
 [SimpleJsonConverter(typeof(HueLightEventJsonConverter))]
 public class HueLightEvent : HueResourceEvent
@@ -19,7 +19,7 @@ public class HueLightEvent : HueResourceEvent
     public double? Brightness { get; set; }
 
     /// <summary>
-    /// The current mode this HueLight is operating in, normal or streaming. 
+    /// The current mode this <see cref="HueLightGroup"/> is operating in, normal or streaming. 
     /// </summary>
     public string? Mode { get; set; } = default!;
 

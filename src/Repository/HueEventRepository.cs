@@ -55,6 +55,9 @@ public class HueEventRepository : HueRepository
                     string? response = await streamReader.ReadLineAsync();
                     if (response != null)
                     {
+                        // For now, print the response from the bridge.
+                        Console.WriteLine(response);
+
                         // We have a response, lets parse data.
                         using JsonDocument document = JsonDocument.Parse(response);
                         var rootElement = document.RootElement;
@@ -70,6 +73,9 @@ public class HueEventRepository : HueRepository
                                 {
                                     case "light":
                                         events.Add(SimpleJson.Convert<HueLightEvent>(element)!);
+                                        break;
+                                    case "scene":
+                                        events.Add(SimpleJson.Convert<HueSceneEvent>(element)!);
                                         break;
                                 }
                             }

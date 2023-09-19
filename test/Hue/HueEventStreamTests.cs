@@ -87,4 +87,28 @@ public class HueEventStreamTests
             Assert.True(light.On);
         }
     }
+
+    [Fact]
+    public async Task TestEventStreamChangeScene()
+    {
+        var sceneController = new HueSceneController("Data/config.json");
+        var roomController = new HueRoomController("Data/config.json");
+        var rooms = await roomController.GetRooms();
+        var room = rooms.Where(r => r.Name!.Contains("Cade")).First();
+        var scenes = await sceneController.GetScenes(room);
+
+        // Start resource manager with the scenes we have.
+        var resourceManager = new HueResourceManager(scenes.Select(l => (HueResource)l).ToList());
+        Repository.StartEventStream(resourceManager);
+
+        // Set First Scene: 
+        await sceneController.SetScene(scenes[0]);
+        Thread.Sleep(500);
+        // Set second scene
+        await sceneController.SetScene(scenes[1]);
+        Thread.Sleep(500);
+
+        Assert.NotEqual("static", scenes[0].Status);
+        Assert.Equal("static", scenes[1].Status);
+    }
 }

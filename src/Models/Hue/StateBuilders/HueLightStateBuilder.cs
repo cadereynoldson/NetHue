@@ -19,7 +19,7 @@ public class HueLightStateBuilder
     }
 
     /// <summary>
-    /// Turns the HueLight this is applied to on.
+    /// Turns the <see cref="HueLight"/> this is applied to on.
     /// </summary>
     /// <returns>this HueStateBuilder</returns>
     public HueLightStateBuilder On()
@@ -29,7 +29,7 @@ public class HueLightStateBuilder
     }
 
     /// <summary>
-    /// Turns the HueLight this is applied to off. 
+    /// Turns the <see cref="HueLight"/> this is applied to off. 
     /// </summary>
     /// <returns>This HueLightStateBuilder</returns>
     public HueLightStateBuilder Off()

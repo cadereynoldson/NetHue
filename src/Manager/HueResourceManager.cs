@@ -17,7 +17,9 @@ public class HueResourceManager
     private readonly object ThreadLock = new();
 
     /// <summary>
-    /// Creates a new instance of a HueEventHandler
+    /// Creates a new instance of a HueEventHandler.
+    /// <br/>Currently supported resources: HueLight, HueScene
+    /// <br/>Not-(yet?) supported (by Hue) resources: HueLightGroup
     /// </summary>
     /// <param name="resources">The resources this handler will manage</param>
     public HueResourceManager(List<HueResource> resources)
@@ -64,7 +66,6 @@ public class HueResourceManager
             if (Resources.ContainsKey(resourceEvent.ResourceId))
             {
                 resourceEvent.Apply(Resources[resourceEvent.ResourceId]);
-                Console.WriteLine($"Light update: {Resources[resourceEvent.ResourceId]}");
             }
         }
     }

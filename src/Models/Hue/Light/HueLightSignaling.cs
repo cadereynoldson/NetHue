@@ -1,7 +1,7 @@
 namespace NetHue;
 
 /// <summary>
-/// Record containing information on the signaling status of a HueLight. 
+/// Record containing information on the signaling status of a <see cref="HueLight"/>. 
 /// </summary>
 public record HueLightSignaling
 {
@@ -22,7 +22,7 @@ public record HueLightSignaling
     public List<CieColor> Colors { get; set; } = default!;
 
     /// <summary>
-    /// Signals that the HueLight supports.
+    /// Signals that the <see cref="HueLight"/> supports.
     /// </summary>
     public List<string> SignalValues { get; init; } = default!;
 

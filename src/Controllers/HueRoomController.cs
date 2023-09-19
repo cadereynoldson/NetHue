@@ -20,6 +20,7 @@ public class HueRoomController : HueController
     /// <summary>
     /// Gets all of the rooms configured with the connected hue bridge. 
     /// </summary>
+    /// <exception cref="HueHttpException">On non-successful fetching of the rooms.</exception>
     /// <returns>A list of HueRooms.</returns>
     public async Task<List<HueRoom>> GetRooms()
     {
@@ -45,6 +46,7 @@ public class HueRoomController : HueController
     /// Gets a HueRoom given it's ID. If no room exists with the given ID, returns null.
     /// </summary>
     /// <param name="roomId">The ID of the room to fetch.</param>
+    /// <exception cref="HueHttpException">On non-successful fetching of the room.</exception>
     /// <returns>The HueRoom with a given ID, null if no room exists with ID.</returns>
     public async Task<HueRoom?> GetRoom(string roomId)
     {
