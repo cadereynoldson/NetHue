@@ -111,4 +111,29 @@ public class HueEventStreamTests
         Assert.NotEqual("static", scenes[0].Status);
         Assert.Equal("static", scenes[1].Status);
     }
+
+    [Fact]
+    public async Task TestGroupLightDimming()
+    {
+        var lightController = new HueLightController("Data/config.json");
+        var roomController = new HueRoomController("Data/config.json");
+        var rooms = await roomController.GetRooms();
+        var room = rooms.Where(r => r.Name!.Contains("Cade")).First();
+        var group = await lightController.GetLightGroup(room);
+        
+        // Start resource manager with the scenes we have.
+        var resourceManager = new HueResourceManager().Manage(group!);
+        Task thread = Task.Run(() => Repository.StartEventStream(resourceManager));
+        Repository.StartEventStream(resourceManager);
+
+        await lightController.UpdateLightGroupState(group!, new HueLightStateBuilder().Brightness(100));
+        Thread.Sleep(2000);
+
+        Assert.Equal(100, group!.Brightness);
+
+        await lightController.UpdateLightGroupState(group!, new HueLightStateBuilder().Brightness(50));
+        Thread.Sleep(2000);
+
+        Assert.Equal(50, (int) group!.Brightness!);
+    }
 }

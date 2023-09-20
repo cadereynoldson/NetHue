@@ -4,8 +4,8 @@ namespace NetHue;
 /// A repository like class which is designed to manage the states of existing HueResources.
 /// Use this class in tandem with HueEventHandler to keep constant updates of your HueResources.
 /// <br/>This will only UPDATE HueResources, does not handle new resources being created.
-/// <br/>Currently supported resources: HueLight, HueScene
-/// <br/>Not-(yet?) supported (by Hue) resources: HueLightGroup
+/// <br/>Currently supported resources: HueLight, HueScene, HueLightGroup
+/// <br/> NOTE: HueLightGroup events are much slower than HueLight and scene events, may take a while for them to update. 
 /// </summary>
 public class HueResourceManager
 {
@@ -21,8 +21,8 @@ public class HueResourceManager
 
     /// <summary>
     /// Creates a new instance of a HueEventHandler.
-    /// <br/>Currently supported resources: HueLight, HueScene
-    /// <br/>Not-(yet?) supported (by Hue) resources: HueLightGroup
+    /// <br/>Currently supported resources: HueLight, HueScene, HueLightGroup
+    /// <br/> NOTE: HueLightGroup events are much slower than HueLight and scene events, may take a while for them to update. 
     /// </summary>
     public HueResourceManager()
     {

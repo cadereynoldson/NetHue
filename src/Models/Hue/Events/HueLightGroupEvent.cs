@@ -1,8 +1,11 @@
+using JsonConversion;
+
 namespace NetHue;
 
 /// <summary>
 /// Class containing information 
 /// </summary>
+[SimpleJsonConverter(typeof(HueLightGroupEventJsonConverter))]
 public class HueLightGroupEvent : HueResourceEvent
 {
 

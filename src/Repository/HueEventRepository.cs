@@ -77,6 +77,9 @@ public class HueEventRepository : HueRepository
                                     case "scene":
                                         events.Add(SimpleJson.Convert<HueSceneEvent>(element)!);
                                         break;
+                                    case "grouped_light":
+                                        events.Add(SimpleJson.Convert<HueLightGroupEvent>(element)!);
+                                        break;
                                 }
                             }
                         }
