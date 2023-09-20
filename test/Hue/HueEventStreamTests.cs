@@ -16,7 +16,7 @@ public class HueEventStreamTests
         var room = rooms.Where(r => r.Name!.Contains("Cade")).First();
         var lights = await lightController.GetLights(room);
 
-        var resourceManager = new HueResourceManager(lights.Select(l => (HueResource)l).ToList());
+        var resourceManager = new HueResourceManager().Manage(lights);
         Repository.StartEventStream(resourceManager);
 
 
@@ -58,7 +58,7 @@ public class HueEventStreamTests
         var room = rooms.Where(r => r.Name!.Contains("Cade")).First();
         var lights = await lightController.GetLights(room);
 
-        var resourceManager = new HueResourceManager(lights.Select(l => (HueResource)l).ToList());
+        var resourceManager = new HueResourceManager().Manage(lights);
         Repository.StartEventStream(resourceManager);
 
         Thread.Sleep(1000);
@@ -98,7 +98,7 @@ public class HueEventStreamTests
         var scenes = await sceneController.GetScenes(room);
 
         // Start resource manager with the scenes we have.
-        var resourceManager = new HueResourceManager(scenes.Select(l => (HueResource)l).ToList());
+        var resourceManager = new HueResourceManager().Manage(scenes);
         Repository.StartEventStream(resourceManager);
 
         // Set First Scene: 

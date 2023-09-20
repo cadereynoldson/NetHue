@@ -5,6 +5,17 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PackageId>NetHue</PackageId>
+    <Version>0.0.11</Version>
+    <Authors>Cade Reynoldson</Authors>
+    <Description>Library for interaction with Philips Hue devices</Description>
+    <PackageTags>lighting smarthome hue philips lights</PackageTags>
+    <PackageProjectUrl>https://github.com/cadereynoldson/NetHue</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/cadereynoldson/NetHue</RepositoryUrl>
+    <RepositoryType>GitHub</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,15 +27,5 @@
       <None Include="..\LICENSE" Pack="true" PackagePath=""/>
       <None Include="..\README.md" Pack="true" PackagePath=""/>
   </ItemGroup>
-
-  <PropertyGroup>
-    <PackageId>NetHue</PackageId>
-    <Version>0.0.10</Version>
-    <Authors>Cade Reynoldson</Authors>
-    <Description>Library for interaction with Philips Hue devices</Description>
-    <PackageTags>lighting, smarthome, hue, philips</PackageTags>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-</PropertyGroup>
 
 </Project>

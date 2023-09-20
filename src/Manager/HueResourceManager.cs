@@ -3,6 +3,9 @@ namespace NetHue;
 /// <summary>
 /// A repository like class which is designed to manage the states of existing HueResources.
 /// Use this class in tandem with HueEventHandler to keep constant updates of your HueResources.
+/// <br/>This will only UPDATE HueResources, does not handle new resources being created.
+/// <br/>Currently supported resources: HueLight, HueScene
+/// <br/>Not-(yet?) supported (by Hue) resources: HueLightGroup
 /// </summary>
 public class HueResourceManager
 {
@@ -21,30 +24,31 @@ public class HueResourceManager
     /// <br/>Currently supported resources: HueLight, HueScene
     /// <br/>Not-(yet?) supported (by Hue) resources: HueLightGroup
     /// </summary>
-    /// <param name="resources">The resources this handler will manage</param>
-    public HueResourceManager(List<HueResource> resources)
+    public HueResourceManager()
     {
         Resources = new Dictionary<string, HueResource>();
-        Manage(resources);
     }
 
     /// <summary>
     /// Adds a new HueResource for this event handler to manage. 
     /// </summary>
     /// <param name="resource">The new resource to manage</param>
-    public void Manage(HueResource resource)
+    /// <returns>This HueResourceManager</returns>
+    public HueResourceManager Manage(HueResource resource)
     {
         lock (ThreadLock)
         {
             Resources.Add(resource.Id, resource);
         }
+        return this;
     }
 
     /// <summary>
     /// Adds new HueResources for this event handler to manage. 
     /// </summary>
     /// <param name="resources">The new resources to manage</param>
-    public void Manage(List<HueResource> resources)
+    /// <returns>This HueResourceManager</returns>
+    public HueResourceManager Manage(List<HueResource> resources)
     {
         lock (ThreadLock)
         {
@@ -53,6 +57,27 @@ public class HueResourceManager
                 Manage(resource);
             }
         }
+        return this;
+    }
+
+    /// <summary>
+    /// Manages all of the lights contained in the parameterized list.
+    /// </summary>
+    /// <param name="lights">The lights to manage</param>
+    /// <returns>This HueResourceManager</returns>
+    public HueResourceManager Manage(List<HueLight> lights)
+    {
+        return Manage(lights.Select(l => (HueResource) l).ToList());
+    }
+
+    /// <summary>
+    /// Manages all of the scenes contained in the parameterized list.
+    /// </summary>
+    /// <param name="scenes">The scenes to manage</param>
+    /// <returns>This HueResourceManager</returns>
+    public HueResourceManager Manage(List<HueScene> scenes)
+    {
+        return Manage(scenes.Select(s => (HueResource) s).ToList());
     }
 
     /// <summary>
@@ -61,11 +86,14 @@ public class HueResourceManager
     /// <param name="events">The events on the HueBridge</param>
     public void Apply(List<HueResourceEvent> events)
     {
-        foreach (HueResourceEvent resourceEvent in events)
+        lock (ThreadLock)
         {
-            if (Resources.ContainsKey(resourceEvent.ResourceId))
+            foreach (HueResourceEvent resourceEvent in events)
             {
-                resourceEvent.Apply(Resources[resourceEvent.ResourceId]);
+                if (Resources.ContainsKey(resourceEvent.ResourceId))
+                {
+                    resourceEvent.Apply(Resources[resourceEvent.ResourceId]);
+                }
             }
         }
     }
